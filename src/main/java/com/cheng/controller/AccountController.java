@@ -13,7 +13,10 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +27,7 @@ public class AccountController {
     @Autowired
     UserService userService;
     /**
-     * 默认账号密码：markerhub / 111111
+     * 默认账号密码：cblog / 111111
      *
      */
     @CrossOrigin
@@ -49,10 +52,11 @@ public class AccountController {
     }
     
     // 退出
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @RequiresAuthentication
     public Result logout() {
         SecurityUtils.getSubject().logout();
+
         return Result.succ(null);
     }
 }
