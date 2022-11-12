@@ -48,6 +48,15 @@ public class BlogController {
         return Result.succ(blog);
     }
 
+    @GetMapping("/blogs/{id}")
+    public Result blogsOfUser(@PathVariable(name = "id") Long id, Integer currentPage){
+        if(currentPage == null || currentPage < 1) currentPage = 1;
+        Page page = new Page(currentPage, 5);
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("user_id", id).orderByDesc("created"));
+
+        return Result.succ(pageData);
+    }
+
     //编辑
     @RequiresAuthentication
     @PostMapping("/edit")
@@ -63,7 +72,6 @@ public class BlogController {
             temp.setCreated(LocalDateTime.now());
             temp.setStatus(0);
         }
-
         BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         blogService.saveOrUpdate(temp);
 
@@ -71,14 +79,14 @@ public class BlogController {
     }
 
     //删除
-    @PostMapping("/delete/{id}")
-    public Result delete(@PathVariable long id){
+    @GetMapping("/delete")
+    public Result delete(Long id){
         System.out.println("删除博客id :" + id);
         Blog blog = blogService.getById(id);
         Assert.notNull(blog,"删除失败，博客不存在");
 
         blogService.removeById(id);
-        return Result.succ(null);
+        return Result.succ("删除成功");
     }
 
 }

@@ -1050,11 +1050,21 @@
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="261" parent="244" name="UK_USERNAME">
+    <column id="261" parent="244" name="gender">
+      <Position>9</Position>
+      <DataType>enum(&apos;男&apos;, &apos;女&apos;)|0e</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="262" parent="244" name="age">
+      <Position>10</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="263" parent="244" name="UK_USERNAME">
       <ColNames>username</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="262" parent="244" name="PRIMARY">
+    <key id="264" parent="244" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

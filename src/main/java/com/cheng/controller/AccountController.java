@@ -3,6 +3,7 @@ package com.cheng.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LoginDto;
 import com.cheng.common.lang.Result;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @RestController
 public class AccountController {
@@ -36,7 +38,6 @@ public class AccountController {
 
     /**
      * 默认账号密码：cblog / 111111
-     *
      */
     @CrossOrigin
     @PostMapping("/login")
@@ -44,7 +45,7 @@ public class AccountController {
             , HttpServletRequest request) {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在");
-        if(!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
+        if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
             return Result.fail("密码错误！");
         }
 //        else if (!request.getSession().getAttribute("vrifyCode").equals(loginDto.getVrifyCode())) {
@@ -63,7 +64,7 @@ public class AccountController {
                 .map()
         );
     }
-    
+
     // 退出
     @PostMapping("/logout")
     @RequiresAuthentication
@@ -73,7 +74,25 @@ public class AccountController {
         return Result.succ(null);
     }
 
-//    获取验证码的请求路径
+    @PostMapping("/register")
+    public Result register(@Validated @RequestBody LoginDto loginDto) {
+        System.out.println(loginDto.toString());
+        User temp = null;
+        if (loginDto.getUsername() != null) {//判别是否重名
+            temp = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+            Assert.isNull(temp, "用户已存在");
+        }
+        temp = new User();
+        temp.setCreated(LocalDateTime.now());
+        temp.setStatus(0);
+        temp.setPassword(DigestUtil.md5Hex(loginDto.getPassword()));
+        temp.setUsername(loginDto.getUsername());
+        userService.save(temp);
+
+        return Result.succ("注册成功");
+    }
+
+    //    获取验证码的请求路径
     @RequestMapping("/kaptcha")
     public void getKaptchaImage(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         byte[] captchaChallengeAsJpeg = null;
