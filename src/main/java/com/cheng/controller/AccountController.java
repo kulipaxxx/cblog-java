@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -41,17 +40,14 @@ public class AccountController {
      */
     @CrossOrigin
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response
-            , HttpServletRequest request) {
+    public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在");
         if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
             return Result.fail("密码错误！");
         }
-//        else if (!request.getSession().getAttribute("vrifyCode").equals(loginDto.getVrifyCode())) {
-//            String msg = "验证码错误";
-//            return Result.fail(msg);
-//        }
+        Assert.isTrue(redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()),"验证码错误");
+
         String jwt = jwtUtils.generateToken(user.getId());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
@@ -77,11 +73,15 @@ public class AccountController {
     @PostMapping("/register")
     public Result register(@Validated @RequestBody LoginDto loginDto) {
         System.out.println(loginDto.toString());
+        System.out.println(redisUtil.get(loginDto.getUuid()));
+        System.out.println(!redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()));
         User temp = null;
         if (loginDto.getUsername() != null) {//判别是否重名
             temp = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
             Assert.isNull(temp, "用户已存在");
         }
+        Assert.isTrue(redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()),"验证码错误");
+
         temp = new User();
         temp.setCreated(LocalDateTime.now());
         temp.setStatus(0);
