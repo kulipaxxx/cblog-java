@@ -1,6 +1,7 @@
 package com.cheng.controller;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -11,22 +12,21 @@ import com.cheng.entity.User;
 import com.cheng.service.UserService;
 import com.cheng.utils.JwtUtils;
 import com.cheng.utils.RedisUtil;
-import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.wf.captcha.ArithmeticCaptcha;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 @RestController
 public class AccountController {
     @Autowired
@@ -92,36 +92,38 @@ public class AccountController {
         return Result.succ("注册成功");
     }
 
-    //    获取验证码的请求路径
-    @RequestMapping("/kaptcha")
-    public void getKaptchaImage(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
-        byte[] captchaChallengeAsJpeg = null;
+    //获取验证码的请求路径
+    @GetMapping("/code")
+    public Result captcha(){
 
-        ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
-        DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
-        try {
-            //生产验证码字符串并保存到session中
-            String createText = defaultKaptcha.createText();
-            httpServletRequest.getSession().setAttribute("vrifyCode", createText);
-            //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
-            BufferedImage challenge = defaultKaptcha.createImage(createText);
-            ImageIO.write(challenge, "jpg", jpegOutputStream);
-        } catch (IllegalArgumentException e) {
-            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
+        //算术类型
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha();
 
-        //定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
-        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        //中文类型验证吗
+        //ChineseCaptcha captcha = new ChineseCaptcha();
 
-        httpServletResponse.setHeader("Cache-Control", "no-store");
-        httpServletResponse.setHeader("Pragma", "no-cache");
-        httpServletResponse.setDateHeader("Expires", 0);
-        httpServletResponse.setContentType("image/jpeg");
-        ServletOutputStream responseOutputStream =
-                httpServletResponse.getOutputStream();
-        responseOutputStream.write(captchaChallengeAsJpeg);
-        responseOutputStream.flush();
-        responseOutputStream.close();
+        // 英文与数字验证码
+        // SpecCaptcha captcha = new SpecCaptcha();
+
+        //英文与数字动态验证码
+        //GifCaptcha captcha = new GifCaptcha();
+
+        //中文动态验证码
+        //ChineseGifCaptcha captcha = new ChineseGifCaptcha();
+        //几位数运算   默认是两位
+        captcha.setLen(2);
+
+        //获取运算结果
+        String result = captcha.text();
+
+        log.info("===============获取运算结果为=========:{}",result);
+
+        String key = UUID.randomUUID().toString();
+        redisUtil.set(key,result,2);
+        Map<String,Object> map = new HashMap<>();
+        map.put("key", key);
+        map.put("img", captcha.toBase64());
+
+        return Result.succ(map);
     }
 }
