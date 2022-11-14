@@ -57,6 +57,9 @@ public class AccountController {
                 .put("username", user.getUsername())
                 .put("avatar", user.getAvatar())
                 .put("email", user.getEmail())
+                .put("gender", user.getGender())
+                .put("age", user.getAge())
+                .put("password", user.getPassword())
                 .map()
         );
     }

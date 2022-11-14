@@ -31,8 +31,11 @@ public class UserController {
         return Result.succ(user);
     }
 
+    //编辑用户信息
+    @RequiresAuthentication //要求权限
     @PostMapping("/save")
     public Result save(@Validated @RequestBody User user) {
+
         return Result.succ(user);
     }
 }
