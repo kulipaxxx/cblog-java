@@ -1,3 +1,4 @@
+
 # DataSource Config
 spring:
   datasource:
@@ -5,6 +6,8 @@ spring:
     url: jdbc:mysql://localhost:3306/cblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+  profiles:
+    active: dev
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml

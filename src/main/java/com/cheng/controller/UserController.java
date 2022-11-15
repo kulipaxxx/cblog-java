@@ -4,6 +4,8 @@ package com.cheng.controller;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/user")
+@Api(description = "用户模块")
 public class UserController {
 
     @Autowired
@@ -32,6 +35,7 @@ public class UserController {
     }
 
     //编辑用户信息
+    @ApiOperation("保存用户信息api")
     @RequiresAuthentication //要求权限
     @PostMapping("/save")
     public Result save(@Validated @RequestBody User user) {

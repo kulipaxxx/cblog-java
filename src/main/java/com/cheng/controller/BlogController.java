@@ -10,6 +10,8 @@ import com.cheng.common.lang.Result;
 import com.cheng.entity.Blog;
 import com.cheng.service.BlogService;
 import com.cheng.utils.ShiroUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,11 +29,13 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/blog")
+@Api(description = "博客模块")
 public class BlogController {
     @Autowired
     BlogService blogService;
 
     //博客列表
+    @ApiOperation("查询所有博客api")
     @GetMapping("/blogs")
     public Result blogs(Integer currentPage) {
         //分页
@@ -41,6 +45,7 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
+    @ApiOperation("博客详情api")
     @GetMapping("/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
         Blog blog = blogService.getById(id);
@@ -48,6 +53,7 @@ public class BlogController {
         return Result.succ(blog);
     }
 
+    @ApiOperation("查询主页api")
     @GetMapping("/blogs/{id}")
     public Result blogsOfUser(@PathVariable(name = "id") Long id, Integer currentPage){
         if(currentPage == null || currentPage < 1) currentPage = 1;
@@ -58,6 +64,7 @@ public class BlogController {
     }
 
     //编辑
+    @ApiOperation("发表、编辑博客api")
     @RequiresAuthentication
     @PostMapping("/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
@@ -79,6 +86,7 @@ public class BlogController {
     }
 
     //删除
+    @ApiOperation("删除博客api")
     @GetMapping("/delete")
     public Result delete(Long id){
         System.out.println("删除博客id :" + id);

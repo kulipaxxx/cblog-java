@@ -13,6 +13,8 @@ import com.cheng.service.UserService;
 import com.cheng.utils.JwtUtils;
 import com.cheng.utils.RedisUtil;
 import com.wf.captcha.ArithmeticCaptcha;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -27,6 +29,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@Api(description = "系统：授权模块")
 public class AccountController {
     @Autowired
     JwtUtils jwtUtils;
@@ -38,7 +41,8 @@ public class AccountController {
     /**
      * 默认账号密码：cblog / 111111
      */
-    @CrossOrigin
+    @ApiOperation("登录api")
+    @CrossOrigin //运行跨越资源请求
     @PostMapping("/login")
     public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
@@ -65,6 +69,7 @@ public class AccountController {
     }
 
     // 退出
+    @ApiOperation("退出api")
     @PostMapping("/logout")
     @RequiresAuthentication
     public Result logout() {
@@ -73,6 +78,7 @@ public class AccountController {
         return Result.succ(null);
     }
 
+    @ApiOperation("注册api")
     @PostMapping("/register")
     public Result register(@Validated @RequestBody LoginDto loginDto) {
         System.out.println(loginDto.toString());
@@ -96,6 +102,7 @@ public class AccountController {
     }
 
     //获取验证码的请求路径
+    @ApiOperation("获取验证码api")
     @GetMapping("/code")
     public Result captcha(){
 
