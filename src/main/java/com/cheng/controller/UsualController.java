@@ -12,21 +12,31 @@ public class UsualController {
     @Autowired
     RedisUtil redisUtil;
 
-//    @RequestMapping(value = "/like",method = RequestMethod.POST)
-//    @ResponseBody
-//    public String like(int entityType,int entityId){
-//        User user = hostHolder.getUser();
-//        // 实现点赞
-//        likeService.like(user.getId(),entityType,entityId);
-//        // 获取点赞的数量
-//        long likeCount = likeService.findEntityLikeCount(entityType,entityId);
-//        // 获取点赞的状态
-//        int likeStatus = likeService.findEntityLikeStatus(user.getId(),entityType,entityId);
-//        // 返回的结果
-//        Map<String ,Object> map = new HashMap<>();
-//        map.put("likeCount",likeCount);
-//        map.put("likeStatus",likeStatus);
-//        return CommunityUtil.getJSONString(0,null,map);
+//     @PostMapping("/clickPraise")
+//    public ResultVO clickPraise(HttpServletRequest request, @RequestBody String param) {
+//        if (JSON.parseObject(param).containsKey("newsId")) {
+//            if (JSON.parseObject(param).containsKey("status")) {
+//                RegAlumniuser user = sysUserUtil.getUser(request);
+//                String newsId = JSON.parseObject(param).getString("newsId");//新闻主键id
+//                String status = JSON.parseObject(param).getString("status");//点赞状态
+//                if (status.equals("1")) {//点赞状态为1 ，点赞
+//                    boolean b = redisUtil.hasKey("like_news" + newsId);
+//                    if (b == false) {//不存在，需新建
+//                        redisUtil.sSet("like_news" + newsId, newsId + "::" + user.getRegAlumniuserid());
+//                    }
+//                    redisUtil.sSetAndTime("like_news" + newsId, 3000, newsId + "::" + user.getRegAlumniuserid());//存在则向缓存中添加
+//                } else {//取消点赞
+//                    redisUtil.setRemove("like_news" + newsId, newsId + "::" + user.getRegAlumniuserid());
+//                }
+//                boolean b = redisUtil.sHasKey("like_news" + newsId, newsId + "::" + user.getRegAlumniuserid());//判断value是否还在redis中
+//                if (b == true) {
+//                    return new ResultVO(ResultCode.SUCCESS, 1);//点赞成功
+//                }
+//                return new ResultVO(ResultCode.SUCCESS, 0);//无点赞
+//            }
+//            return new ResultVO(ResultCode.FAILED, "请传入参数");
+//        }
+//        return new ResultVO(ResultCode.FAILED, "请传入参数");
 //    }
 
 }
