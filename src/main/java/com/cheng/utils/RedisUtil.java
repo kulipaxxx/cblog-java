@@ -440,6 +440,16 @@ public class RedisUtil {
         }
     }
 
+    public boolean lSet(String key, Long value) {
+        try {
+            redisTemplate.opsForList().rightPush(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * 将list放入缓存
      * @param key 键
@@ -458,6 +468,16 @@ public class RedisUtil {
         }
     }
 
+    public boolean lSet(String key, Long value, long time) {
+        try {
+            redisTemplate.opsForList().rightPush(key, value);
+            if (time > 0) expire(key, time);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     /**
      * 将list放入缓存
      * @param key 键
