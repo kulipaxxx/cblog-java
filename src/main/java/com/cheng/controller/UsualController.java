@@ -13,15 +13,15 @@ public class UsualController {
     RedisUtil redisUtil;
 
 //     @PostMapping("/clickPraise")
-//    public ResultVO clickPraise(HttpServletRequest request, @RequestBody String param) {
-//        if (JSON.parseObject(param).containsKey("newsId")) {
-//            if (JSON.parseObject(param).containsKey("status")) {
-//                RegAlumniuser user = sysUserUtil.getUser(request);
-//                String newsId = JSON.parseObject(param).getString("newsId");//新闻主键id
-//                String status = JSON.parseObject(param).getString("status");//点赞状态
+//    public Result clickPraise(HttpServletRequest request, @RequestBody String param) {
+//        if (param.contains("newsId")) {
+//            if (param.contains("status")) {
+//                User user = new User();
+//                String newsId = "newsId";//新闻主键id
+//                Integer status = user.getStatus();//点赞状态
 //                if (status.equals("1")) {//点赞状态为1 ，点赞
 //                    boolean b = redisUtil.hasKey("like_news" + newsId);
-//                    if (b == false) {//不存在，需新建
+//                    if (!b) {//不存在，需新建
 //                        redisUtil.sSet("like_news" + newsId, newsId + "::" + user.getRegAlumniuserid());
 //                    }
 //                    redisUtil.sSetAndTime("like_news" + newsId, 3000, newsId + "::" + user.getRegAlumniuserid());//存在则向缓存中添加
@@ -30,13 +30,14 @@ public class UsualController {
 //                }
 //                boolean b = redisUtil.sHasKey("like_news" + newsId, newsId + "::" + user.getRegAlumniuserid());//判断value是否还在redis中
 //                if (b == true) {
-//                    return new ResultVO(ResultCode.SUCCESS, 1);//点赞成功
+//                    return Result.succ(1);//点赞成功
 //                }
-//                return new ResultVO(ResultCode.SUCCESS, 0);//无点赞
+//                return Result.succ(0);//无点赞
 //            }
-//            return new ResultVO(ResultCode.FAILED, "请传入参数");
+//            return Result.fail("请传入参数");
 //        }
-//        return new ResultVO(ResultCode.FAILED, "请传入参数");
+//        return Result.fail( "请传入参数");
 //    }
 
 }
+
