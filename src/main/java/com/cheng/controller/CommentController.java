@@ -75,7 +75,7 @@ public class CommentController {
         comment.setAvatar(userService.getById(commentDto.getUserId()).getAvatar());
         /*
         //获取到用户评论，对评论人id存redis,具体数据交给rabbitMQ异步存储在mysql
-        redisUtil.lSet(String.valueOf(commentDto.getBlogId()), commentDto.getUserId());
+        Utils.lSet(String.valueOf(commentDto.getBlogId()), commentDto.getUserId());
 
         //rabbitMQ异步存数据到mysql
         */

@@ -1,4 +1,4 @@
-package com.cheng.common.vo;
+package com.cheng.controller.vo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
