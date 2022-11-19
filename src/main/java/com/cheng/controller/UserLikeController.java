@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 点赞记录表 前端控制器
+ * 用户点赞表 前端控制器
  * </p>
  *
  * @author author: cheng
- * @since 2022-11-18
+ * @since 2022-11-19
  */
 @RestController
-@RequestMapping("/user-likes")
-public class UserLikesController {
+@RequestMapping("/user-like")
+public class UserLikeController {
 
 }

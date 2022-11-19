@@ -21,7 +21,7 @@ public class RedisKeyUtils {
      * @param likedPostId 点赞的人的id
      * @return
      */
-    public static String getLikedKey(String likedUserId, String likedPostId) {
+    public static String getLikedKey(Long likedUserId, Long likedPostId) {
         return likedUserId +
                 "::" +
                 likedPostId;

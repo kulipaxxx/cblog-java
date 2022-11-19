@@ -1,5 +1,7 @@
 package com.cheng.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -8,55 +10,46 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 用户点赞表
  * </p>
  *
  * @author author: cheng
- * @since 2022-11-18
+ * @since 2022-11-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Video implements Serializable {
+public class UserLike implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
-     * 点赞数
+     * 被点赞的用户id
      */
-    private Integer likesNumber;
+    private String likedUserId;
 
     /**
-     * 评论数
+     * 点赞的用户id
      */
-    private Integer commentsNumber;
+    private String giveLikedId;
 
     /**
-     * 分享数
+     * 点赞状态，0取消，1点赞
      */
-    private Integer shareNumber;
+    private Boolean status;
 
     /**
-     * 创建时间
+     * 创建   时间
      */
     private LocalDateTime createTime;
 
     /**
-     * 创建者
-     */
-    private String createUser;
-
-    /**
-     * 更新时间
+     * 修改时间
      */
     private LocalDateTime updateTime;
-
-    /**
-     * 更新者
-     */
-    private String updateUser;
 
 
 }
