@@ -2,11 +2,12 @@ package com.cheng.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -24,7 +25,7 @@ public class UserLike implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private String id;
 
     /**
      * 被点赞的用户id
@@ -39,7 +40,7 @@ public class UserLike implements Serializable {
     /**
      * 点赞状态，0取消，1点赞
      */
-    private Boolean status;
+    private Integer status;
 
     /**
      * 创建   时间
@@ -50,6 +51,12 @@ public class UserLike implements Serializable {
      * 修改时间
      */
     private LocalDateTime updateTime;
+
+    public UserLike(String likedUserId,String giveLikedId,Integer value){
+        this.likedUserId = likedUserId;
+        this.giveLikedId = giveLikedId;
+        this.status = value;
+    }
 
 
 }
