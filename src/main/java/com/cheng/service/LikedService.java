@@ -1,9 +1,8 @@
 package com.cheng.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cheng.entity.UserLike;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface LikedService {
@@ -25,18 +24,18 @@ public interface LikedService {
     /**
      * 根据被点赞人的id查询点赞列表（即查询都谁给这个人点赞过）
      * @param likedUserId 被点赞人的id
-     * @param pageable
+     * @param currentPage
      * @return
      */
-    Page<UserLike> getLikedListByLikedUserId(String likedUserId, Pageable pageable);
+    IPage getLikedListByLikedUserId(String likedUserId, Integer currentPage);
 
     /**
      * 根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
      * @param giveLikedId
-     * @param pageable
+     * @param currentPage
      * @return
      */
-    Page<UserLike> getLikedListByGiveLikedId(String giveLikedId, Pageable pageable);
+    IPage getLikedListByGiveLikedId(String giveLikedId, Integer currentPage);
 
     /**
      * 通过被点赞人和点赞人id查询是否存在点赞记录

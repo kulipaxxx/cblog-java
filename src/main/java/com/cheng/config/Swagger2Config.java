@@ -2,7 +2,6 @@ package com.cheng.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -18,7 +17,7 @@ public class Swagger2Config {
     //Swagger2
     // 核心配置Docket
     @Bean
-    public Docket createDocket(Environment environment){
+    public Docket createDocket(){
         return new Docket(DocumentationType.SWAGGER_2)//指定api类型为swagger2
                 .groupName("v1.0")
                 .apiInfo(apiInfo())//定义api文档信息
@@ -27,7 +26,8 @@ public class Swagger2Config {
                 .build();
     }
 
-//    配置swagger信息
+
+    //配置swagger信息
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("codeC的swagger文档")
@@ -36,7 +36,6 @@ public class Swagger2Config {
                 .termsOfServiceUrl("https://blog.csdn.net/weixin_58993861?type=blog")
                 .contact(new Contact("codeC","/","1845472368@qq.com"))
                 .build();
-
     }
 
 

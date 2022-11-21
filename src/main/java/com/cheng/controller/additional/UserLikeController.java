@@ -1,8 +1,8 @@
-package com.cheng.controller;
+package com.cheng.controller.additional;
 
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user-like")
+@Api(tags = "点赞模块")
 public class UserLikeController {
 
 }

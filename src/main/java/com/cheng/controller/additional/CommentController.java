@@ -1,4 +1,4 @@
-package com.cheng.controller;
+package com.cheng.controller.additional;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +12,7 @@ import com.cheng.service.BlogService;
 import com.cheng.service.CommentService;
 import com.cheng.service.UserService;
 import com.cheng.utils.RedisUtil;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/comment")
+@Api(description = "评论模块")
 public class CommentController {
 
     @Autowired

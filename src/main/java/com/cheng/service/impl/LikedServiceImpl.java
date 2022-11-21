@@ -1,20 +1,19 @@
 package com.cheng.service.impl;
 
-import cn.hutool.system.UserInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cheng.common.dto.LikedCountDTO;
 import com.cheng.common.lang.LikedStatusEnum;
+import com.cheng.entity.Blog;
 import com.cheng.entity.UserLike;
+import com.cheng.service.BlogService;
 import com.cheng.service.LikedService;
 import com.cheng.service.RedisService;
 import com.cheng.service.UserLikeService;
-import com.cheng.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -27,10 +26,12 @@ public class LikedServiceImpl implements LikedService {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    BlogService blogService;
     @Override
     @Transactional
     public void save(UserLike userLike) {
-        userLikeService.save(userLike);
+        userLikeService.saveOrUpdate(userLike);
     }
 
     @Override
@@ -39,23 +40,44 @@ public class LikedServiceImpl implements LikedService {
         userLikeService.saveBatch(list);
     }
 
+    /**
+     * 获取该用户被点赞信息
+     * @param likedUserId 被点赞人的id
+     * @param currentPage
+     * @return
+     */
     @Override
-    public Page<UserLike> getLikedListByLikedUserId(String likedUserId, Pageable pageable) {
-        return userLikeService.findByLikedUserIdAndStatus(likedUserId, LikedStatusEnum.LIKE.getCode(), pageable);
+    public IPage getLikedListByLikedUserId(String likedUserId, Integer currentPage) {
+        return userLikeService.findByLikedUserIdAndStatus(likedUserId, LikedStatusEnum.LIKE.getCode(), currentPage);
     }
 
+    /**
+     * 根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
+     * @param giveLikedId
+     * @param currentPage
+     * @return
+     */
     @Override
-    public Page<UserLike> getLikedListByGiveLikedId(String giveLikedId, Pageable pageable) {
-        return userLikeService.findByGiveLikedIdAndStatus(giveLikedId, LikedStatusEnum.LIKE.getCode(), pageable);
+    public IPage getLikedListByGiveLikedId(String giveLikedId, Integer currentPage) {
+        return userLikeService.findByGiveLikedIdAndStatus(giveLikedId, LikedStatusEnum.LIKE.getCode(), currentPage);
     }
 
+    /**
+     *通过被点赞人和点赞人id查询是否存在点赞记录
+     * @param likedUserId
+     * @param giveLikedId
+     * @return
+     */
     @Override
     public UserLike getByLikedUserIdAndGiveLikedId(String likedUserId, String giveLikedId) {
         return userLikeService.findByLikedUserIdAndLikedPostId(likedUserId, giveLikedId);
     }
 
+    /**
+     * 持久化存入数据库
+     */
     @Override
-    @Transactional
+    @Transactional //事务管理
     public void transLikedFromRedis2DB() {
         List<UserLike> list = redisService.getLikedDataFromRedis();
         for (UserLike like : list) {
@@ -71,18 +93,24 @@ public class LikedServiceImpl implements LikedService {
         }
     }
 
+    /**
+     * 持久化存入数据库
+     */
     @Override
     @Transactional
     public void transLikedCountFromRedis2DB() {
         List<LikedCountDTO> list = redisService.getLikedCountFromRedis();
         for (LikedCountDTO dto : list) {
-            UserInfo user = userLikeService.getById(dto.getInfoId());
+            UserLike user = userLikeService.getById(dto.getInfoId());
+            String userId = user.getLikedUserId();
+
+            Blog blog = blogService.getById(userId);
             //点赞数量属于无关紧要的操作，出错无需抛异常
-            if (user != null) {
-                Integer likeNum = user.getLikeNum() + dto.getCount();
-                user.setLikeNum(likeNum);
+            if (blog != null) {
+                Integer likeNum = dto.getValue();
+                blog.setLikeCount(likeNum);
                 //更新点赞数量
-                userLikeService.update(user);
+                blogService.updateById(blog);
             }
         }
     }

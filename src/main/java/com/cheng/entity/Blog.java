@@ -56,5 +56,7 @@ public class Blog implements Serializable {
     @ApiModelProperty("文章状态")
     private Integer status;
 
+    @ApiModelProperty("文章点赞数")
+    private Integer likeCount;
 
 }
