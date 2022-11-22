@@ -2,7 +2,7 @@ package com.cheng.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cheng.common.dto.LikedCountDTO;
-import com.cheng.common.lang.LikedStatusEnum;
+import com.cheng.utils.LikedStatusEnum;
 import com.cheng.entity.Blog;
 import com.cheng.entity.UserLike;
 import com.cheng.service.BlogService;
@@ -28,6 +28,7 @@ public class LikedServiceImpl implements LikedService {
 
     @Autowired
     BlogService blogService;
+
     @Override
     @Transactional
     public void save(UserLike userLike) {

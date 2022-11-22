@@ -2,4 +2,6 @@ springfox:
   documentation:
     swagger-ui:
       enabled: true
-
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志

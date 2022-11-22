@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Data
 @ApiModel("服务端Login信息")
 public class LoginDto implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("用户名")
     @NotBlank(message = "昵称不能为空")

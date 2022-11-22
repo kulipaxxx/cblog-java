@@ -1,6 +1,12 @@
 package com.cheng.utils;
 
+import com.cheng.mapper.BlogMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class RedisKeyUtils {
+
+    @Autowired
+    BlogMapper blogMapper;
 
     //保存用户点赞数据的key
     public static final String MAP_USER_LIKED = "MAP_USER_LIKED";

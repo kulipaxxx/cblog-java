@@ -1,8 +1,7 @@
 package com.cheng.mapper;
 
-import com.cheng.entity.Blog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
+import com.cheng.entity.Blog;
 
 /**
  * <p>

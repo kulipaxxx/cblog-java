@@ -1,7 +1,11 @@
 package com.cheng;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cheng.mapper.UserMapper;
+import com.cheng.service.UserLikeService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -18,6 +22,21 @@ class CblogApplicationTests {
 //true
         System.out.println(md5Hex2);
         System.out.println(md5Hex1.equals(md5Hex2));
+    }
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    UserLikeService userLikeService;
+
+    @Test
+    void test1(){
+        IPage iPage = userLikeService.findByLikedUserIdAndStatus("1", 0, 0);
+        Object[] objects = iPage.getRecords().toArray();
+        for (Object object : objects) {
+            System.out.println(object.toString());
+        }
     }
 
 }

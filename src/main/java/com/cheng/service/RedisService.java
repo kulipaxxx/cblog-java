@@ -35,6 +35,13 @@ public interface RedisService {
          * @param likedUserId
          */
         void incrementLikedCount(String likedUserId);
+
+        /**
+         * 获取点赞数量
+         * @param likedUserId
+         * @return
+         */
+        Integer getLikedCount(String likedUserId);
         /**
          * 该用户的点赞数减1
          * @param likedUserId

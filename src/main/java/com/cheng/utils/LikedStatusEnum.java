@@ -1,4 +1,4 @@
-package com.cheng.common.lang;
+package com.cheng.utils;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.cheng.service.impl;
 
 import com.cheng.common.dto.LikedCountDTO;
-import com.cheng.common.lang.LikedStatusEnum;
+import com.cheng.utils.LikedStatusEnum;
 import com.cheng.entity.UserLike;
 import com.cheng.service.RedisService;
 import com.cheng.utils.RedisKeyUtils;
@@ -45,6 +45,11 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void incrementLikedCount(String likedUserId) {
         redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedUserId, 1);
+    }
+
+    @Override
+    public Integer getLikedCount(String likedUserId) {
+        return (Integer)redisTemplate.opsForHash().get(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedUserId);
     }
 
     @Override
