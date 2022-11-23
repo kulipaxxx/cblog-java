@@ -1150,7 +1150,7 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="282" parent="247" name="liked_user_id">
+    <column id="282" parent="247" name="liked_blog_id">
       <Position>2</Position>
       <Comment>被点赞的用户id</Comment>
       <DataType>varchar(32)|0s</DataType>
@@ -1189,7 +1189,7 @@
       <OnUpdate>CURRENT_TIMESTAMP</OnUpdate>
     </column>
     <index id="287" parent="247" name="liked_user_id">
-      <ColNames>liked_user_id</ColNames>
+      <ColNames>liked_blog_id</ColNames>
       <Type>btree</Type>
     </index>
     <index id="288" parent="247" name="give_liked_id">

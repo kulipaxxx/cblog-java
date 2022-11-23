@@ -29,7 +29,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController("/auth")
-@Api(description = "系统：授权模块")
+@Api(description = "系统：授权接口")
 public class AccountController {
     @Autowired
     JwtUtils jwtUtils;
