@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.*;
  * @author author: cheng
  * @since 2022-11-19
  */
+
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/like")
 @Api(description = "点赞模块")
 public class UserLikeController {
 
@@ -34,11 +36,13 @@ public class UserLikeController {
     UserLikeService userLikeService;
 
     /**
+     * 得到clickl
      * 获取当前博客点赞量
-     * @param blog_id
-     * @return
+     *
+     * @param blog_id 博客id
+     * @return {@link Result}
      */
-    @GetMapping("/like/getClickL")
+    @GetMapping("/getClickL")
     public Result getClickL(String blog_id){
         /**
          * 1.先查缓存
@@ -52,11 +56,13 @@ public class UserLikeController {
     }
 
     /**
+     * 点击喜欢
      * 点赞业务
-     * @param likeDto
-     * @return
+     *
+     * @param likeDto 像dto
+     * @return {@link Result}
      */
-    @PostMapping("/like/clickL")
+    @PostMapping("/clickL")
     public Result clickLike(@Validated @RequestBody LikeDto likeDto){
         String likedUserId = likeDto.getLikedUserId();
         String giveLikedId = likeDto.getGiveLikedId();

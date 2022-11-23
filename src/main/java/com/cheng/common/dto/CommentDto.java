@@ -11,6 +11,8 @@ public class CommentDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long id;
+
     private Long blogId;
 
     private Long userId;
@@ -18,4 +20,6 @@ public class CommentDto implements Serializable {
     private String userName;
 
     private String content;
+
+    private String avatar;
 }

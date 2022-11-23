@@ -42,6 +42,7 @@ public class RedisServiceImpl implements RedisService {
         redisTemplate.opsForHash().delete(RedisKeyUtils.MAP_USER_LIKED, key);
     }
 
+    //原子操作
     @Override
     public void incrementLikedCount(String likedBlogId) {
         redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedBlogId, 1);
