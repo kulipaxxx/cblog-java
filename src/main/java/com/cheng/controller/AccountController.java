@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestController
+@RestController("/auth")
 @Api(description = "系统：授权模块")
 public class AccountController {
     @Autowired

@@ -15,16 +15,16 @@ import com.cheng.entity.UserLike;
 public interface UserLikeService extends IService<UserLike> {
 
     /**
-     *
-     * @param likedUserId
+     *根据被点赞人的id查询点赞列表（即查询都谁给这个人点赞过）
+     * @param likedBlogId
      * @param code
      * @param currentPage
      * @return
      */
-    IPage findByLikedUserIdAndStatus(String likedUserId, Integer code, Integer currentPage);
+    IPage findByLikedUserIdAndStatus(String likedBlogId, Integer code, Integer currentPage);
 
     /**
-     *
+     *根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
      * @param giveLikedId
      * @param code
      * @param currentPage
@@ -33,10 +33,10 @@ public interface UserLikeService extends IService<UserLike> {
     IPage findByGiveLikedIdAndStatus(String giveLikedId, Integer code,Integer currentPage);
 
     /**
-     *
-     * @param likedUserId
+     *通过被点赞人和点赞人id查询是否存在点赞记录
+     * @param likedBlogId
      * @param giveLikedId
      * @return
      */
-    UserLike findByLikedUserIdAndLikedPostId(String likedUserId, String giveLikedId);
+    UserLike findByLikedUserIdAndLikedPostId(String likedBlogId, String giveLikedId);
 }

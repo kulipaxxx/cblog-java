@@ -23,11 +23,11 @@ public interface LikedService {
 
     /**
      * 根据被点赞人的id查询点赞列表（即查询都谁给这个人点赞过）
-     * @param likedUserId 被点赞人的id
+     * @param likedBlogId 被点赞人的id
      * @param currentPage
      * @return
      */
-    IPage getLikedListByLikedUserId(String likedUserId, Integer currentPage);
+    IPage getLikedListByLikedUserId(String likedBlogId, Integer currentPage);
 
     /**
      * 根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
@@ -39,11 +39,11 @@ public interface LikedService {
 
     /**
      * 通过被点赞人和点赞人id查询是否存在点赞记录
-     * @param likedUserId
+     * @param likedBlogId
      * @param giveLikedId
      * @return
      */
-    UserLike getByLikedUserIdAndGiveLikedId(String likedUserId, String giveLikedId);
+    UserLike getByLikedUserIdAndGiveLikedId(String likedBlogId, String giveLikedId);
 
     /**
      * 将Redis里的点赞数据存入数据库中

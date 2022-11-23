@@ -28,15 +28,15 @@ import java.time.LocalDateTime;
  * @since 2022-10-31
  */
 @RestController
-@RequestMapping("/blog")
-@Api(description = "博客模块")
+@RequestMapping("/api/blog")
+@Api(description = "系统：博客模块")
 public class BlogController {
     @Autowired
     BlogService blogService;
 
     //博客列表
     @ApiOperation("查询所有博客api")
-    @GetMapping("/blogs")
+    @GetMapping("/index")
     public Result blogs(Integer currentPage) {
         //分页
         if(currentPage == null || currentPage < 1) currentPage = 1;
@@ -46,7 +46,7 @@ public class BlogController {
     }
 
     @ApiOperation("博客详情api")
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
         Blog blog = blogService.getById(id);
         Assert.notNull(blog, "该博客已删除！");
@@ -54,7 +54,7 @@ public class BlogController {
     }
 
     @ApiOperation("查询主页api")
-    @GetMapping("/blogs/{id}")
+    @GetMapping("/index/{id}")
     public Result blogsOfUser(@PathVariable(name = "id") Long id, Integer currentPage){
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
@@ -87,8 +87,8 @@ public class BlogController {
 
     //删除
     @ApiOperation("删除博客api")
-    @GetMapping("/delete")
-    public Result delete(Long id){
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Long id){
         System.out.println("删除博客id :" + id);
         Blog blog = blogService.getById(id);
         Assert.notNull(blog,"删除失败，博客不存在");

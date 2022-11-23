@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2022-11-15
  */
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 @Api(description = "评论模块")
 public class CommentController {
 

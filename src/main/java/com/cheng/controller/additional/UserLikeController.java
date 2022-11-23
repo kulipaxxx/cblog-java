@@ -8,6 +8,7 @@ import com.cheng.service.RedisService;
 import com.cheng.service.UserLikeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-19
  */
 @RestController
-@RequestMapping("/like")
-@Api(tags = "点赞模块")
+@RequestMapping("/api")
+@Api(description = "点赞模块")
 public class UserLikeController {
 
     @Autowired
@@ -32,12 +33,18 @@ public class UserLikeController {
     @Autowired
     UserLikeService userLikeService;
 
-    @GetMapping("/getClickL")
+    /**
+     * 获取当前博客点赞量
+     * @param blog_id
+     * @return
+     */
+    @GetMapping("/like/getClickL")
     public Result getClickL(String blog_id){
         /**
          * 1.先查缓存
          * 2.缓存没有查数据库
          */
+        System.out.println(blog_id);
         Integer count = redisService.getLikedCount(blog_id);
         System.out.println("博客：" + blog_id + "点赞总数" + count);
 
@@ -49,13 +56,12 @@ public class UserLikeController {
      * @param likeDto
      * @return
      */
-    @PostMapping("/clickL")
-    public Result clickLike(LikeDto likeDto){
+    @PostMapping("/like/clickL")
+    public Result clickLike(@Validated @RequestBody LikeDto likeDto){
         String likedUserId = likeDto.getLikedUserId();
         String giveLikedId = likeDto.getGiveLikedId();
-        likedUserId = giveLikedId = "1";
-        Boolean flag = true;
-        if (likeDto.getStatus() == 1 || flag ){//是否点赞
+        System.out.println(likeDto.toString());
+        if (likeDto.getStatus() == 1){//是否点赞
             redisService.saveLiked2Redis(likedUserId, giveLikedId);
             //点赞总数加一
             redisService.incrementLikedCount(likedUserId);

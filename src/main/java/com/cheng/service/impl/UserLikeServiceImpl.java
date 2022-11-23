@@ -26,17 +26,17 @@ public class UserLikeServiceImpl extends ServiceImpl<UserLikeMapper, UserLike> i
 
     /**
      * 根据被点赞人的id查询点赞列表（即查询都谁给这个人点赞过）
-     * @param likedUserId
+     * @param likedBlogId
      * @param code
      * @param currentPage
      * @return
      */
     @Override
-    public IPage findByLikedUserIdAndStatus(String likedUserId, Integer code, Integer currentPage) {
+    public IPage findByLikedUserIdAndStatus(String likedBlogId, Integer code, Integer currentPage) {
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page<UserLike> page1 = new Page<>(currentPage,5);
 
-        return userLikeMapper.selectPage( page1, new QueryWrapper<UserLike>().eq("liked_user_id",likedUserId).eq("status",code));
+        return userLikeMapper.selectPage( page1, new QueryWrapper<UserLike>().eq("liked_blog_id",likedBlogId).eq("status",code));
     }
 
     /**
@@ -53,12 +53,12 @@ public class UserLikeServiceImpl extends ServiceImpl<UserLikeMapper, UserLike> i
 
     /**
      * 通过被点赞人和点赞人id查询是否存在点赞记录
-     * @param likedUserId
+     * @param likedBlogId
      * @param giveLikedId
      * @return
      */
     @Override
-    public UserLike findByLikedUserIdAndLikedPostId(String likedUserId, String giveLikedId) {
+    public UserLike findByLikedUserIdAndLikedPostId(String likedBlogId, String giveLikedId) {
         return null;
     }
 }

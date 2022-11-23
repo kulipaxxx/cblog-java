@@ -43,13 +43,13 @@ public class LikedServiceImpl implements LikedService {
 
     /**
      * 获取该用户被点赞信息
-     * @param likedUserId 被点赞人的id
+     * @param likedBlogId 被点赞人的id
      * @param currentPage
      * @return
      */
     @Override
-    public IPage getLikedListByLikedUserId(String likedUserId, Integer currentPage) {
-        return userLikeService.findByLikedUserIdAndStatus(likedUserId, LikedStatusEnum.LIKE.getCode(), currentPage);
+    public IPage getLikedListByLikedUserId(String likedBlogId, Integer currentPage) {
+        return userLikeService.findByLikedUserIdAndStatus(likedBlogId, LikedStatusEnum.LIKE.getCode(), currentPage);
     }
 
     /**
@@ -65,13 +65,13 @@ public class LikedServiceImpl implements LikedService {
 
     /**
      *通过被点赞人和点赞人id查询是否存在点赞记录
-     * @param likedUserId
+     * @param likedBlogId
      * @param giveLikedId
      * @return
      */
     @Override
-    public UserLike getByLikedUserIdAndGiveLikedId(String likedUserId, String giveLikedId) {
-        return userLikeService.findByLikedUserIdAndLikedPostId(likedUserId, giveLikedId);
+    public UserLike getByLikedUserIdAndGiveLikedId(String likedBlogId, String giveLikedId) {
+        return userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
     }
 
     /**
@@ -82,7 +82,7 @@ public class LikedServiceImpl implements LikedService {
     public void transLikedFromRedis2DB() {
         List<UserLike> list = redisService.getLikedDataFromRedis();
         for (UserLike like : list) {
-            UserLike ul = getByLikedUserIdAndGiveLikedId(like.getLikedUserId(), like.getGiveLikedId());
+            UserLike ul = getByLikedUserIdAndGiveLikedId(like.getLikedBlogId(), like.getGiveLikedId());
             if (ul == null) {
                 //没有记录，直接存入
                 save(like);
@@ -103,7 +103,7 @@ public class LikedServiceImpl implements LikedService {
         List<LikedCountDTO> list = redisService.getLikedCountFromRedis();
         for (LikedCountDTO dto : list) {
             UserLike user = userLikeService.getById(dto.getInfoId());
-            String userId = user.getLikedUserId();
+            String userId = user.getLikedBlogId();
 
             Blog blog = blogService.getById(userId);
             //点赞数量属于无关紧要的操作，出错无需抛异常

@@ -32,7 +32,7 @@ public class UserLike implements Serializable {
     /**
      * 被点赞的用户id
      */
-    private String likedUserId;
+    private String likedBlogId;
 
     /**
      * 点赞的用户id
@@ -54,8 +54,8 @@ public class UserLike implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public UserLike(String likedUserId,String giveLikedId,Integer value){
-        this.likedUserId = likedUserId;
+    public UserLike(String likedBlogId,String giveLikedId,Integer value){
+        this.likedBlogId = likedBlogId;
         this.giveLikedId = giveLikedId;
         this.status = value;
     }

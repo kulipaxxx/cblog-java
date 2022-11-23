@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-10-31
  */
 @RestController
-@RequestMapping("/user")
-@Api(description = "用户模块")
+@RequestMapping("/api/user")
+@Api(description = "系统：用户模块")
 public class UserController {
 
     @Autowired

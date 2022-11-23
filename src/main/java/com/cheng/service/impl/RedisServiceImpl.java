@@ -23,38 +23,38 @@ public class RedisServiceImpl implements RedisService {
     RedisTemplate redisTemplate;
 
     @Override
-    public void saveLiked2Redis(String likedUserId, String giveLikeId) {
-        String key = RedisKeyUtils.getLikedKey(likedUserId, giveLikeId);
+    public void saveLiked2Redis(String likedBlogId, String giveLikeId) {
+        String key = RedisKeyUtils.getLikedKey(likedBlogId, giveLikeId);
         redisTemplate.opsForHash().put(RedisKeyUtils.MAP_USER_LIKED,
                 key, LikedStatusEnum.LIKE.getCode());
     }
 
     @Override
-    public void unlikeFromRedis(String likedUserId, String giveLikeId) {
-        String key = RedisKeyUtils.getLikedKey(likedUserId, giveLikeId);
+    public void unlikeFromRedis(String likedBlogId, String giveLikeId) {
+        String key = RedisKeyUtils.getLikedKey(likedBlogId, giveLikeId);
         redisTemplate.opsForHash().put(RedisKeyUtils.MAP_USER_LIKED,
                 key, LikedStatusEnum.UNLIKE.getCode());
     }
 
     @Override
-    public void deleteLikedFromRedis(String likedUserId, String giveLikeId) {
-        String key = RedisKeyUtils.getLikedKey(likedUserId, giveLikeId);
+    public void deleteLikedFromRedis(String likedBlogId, String giveLikeId) {
+        String key = RedisKeyUtils.getLikedKey(likedBlogId, giveLikeId);
         redisTemplate.opsForHash().delete(RedisKeyUtils.MAP_USER_LIKED, key);
     }
 
     @Override
-    public void incrementLikedCount(String likedUserId) {
-        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedUserId, 1);
+    public void incrementLikedCount(String likedBlogId) {
+        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedBlogId, 1);
     }
 
     @Override
-    public Integer getLikedCount(String likedUserId) {
-        return (Integer)redisTemplate.opsForHash().get(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedUserId);
+    public Integer getLikedCount(String likedBlogId) {
+        return (Integer)redisTemplate.opsForHash().get(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedBlogId);
     }
 
     @Override
-    public void decrementLikedCount(String likedUserId) {
-        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedUserId, -1);
+    public void decrementLikedCount(String likedBlogId) {
+        redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_USER_LIKED_COUNT, likedBlogId, -1);
     }
 
 

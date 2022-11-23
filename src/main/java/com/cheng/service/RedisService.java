@@ -14,39 +14,39 @@ import java.util.List;
 public interface RedisService {
         /**
          * 点赞。状态为1
-         * @param likedUserId
+         * @param likedBlogId
          * @param giveLikeId
          */
-        void saveLiked2Redis(String likedUserId, String giveLikeId);
+        void saveLiked2Redis(String likedBlogId, String giveLikeId);
         /**
          * 取消点赞。将状态改变为0
-         * @param likedUserId
+         * @param likedBlogId
          * @param giveLikeId
          */
-        void unlikeFromRedis(String likedUserId, String giveLikeId);
+        void unlikeFromRedis(String likedBlogId, String giveLikeId);
         /**
          * 从Redis中删除一条点赞数据
-         * @param likedUserId
+         * @param likedBlogId
          * @param giveLikeId
          */
-        void deleteLikedFromRedis(String likedUserId, String giveLikeId);
+        void deleteLikedFromRedis(String likedBlogId, String giveLikeId);
         /**
          * 该用户的点赞数加1
-         * @param likedUserId
+         * @param likedBlogId
          */
-        void incrementLikedCount(String likedUserId);
+        void incrementLikedCount(String likedBlogId);
 
         /**
          * 获取点赞数量
-         * @param likedUserId
+         * @param likedBlogId
          * @return
          */
-        Integer getLikedCount(String likedUserId);
+        Integer getLikedCount(String likedBlogId);
         /**
          * 该用户的点赞数减1
-         * @param likedUserId
+         * @param likedBlogId
          */
-        void decrementLikedCount(String likedUserId);
+        void decrementLikedCount(String likedBlogId);
         /**
          * 获取Redis中存储的所有点赞数据
          * @return
