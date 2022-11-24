@@ -39,7 +39,12 @@ public class AccountController {
     RedisUtil redisUtil;
 
     /**
+     * 登录
      * 默认账号密码：cblog / 111111
+     *
+     * @param loginDto 登录dto
+     * @param response 响应
+     * @return {@link Result}
      */
     @ApiOperation("登录api")
     @CrossOrigin //运行跨越资源请求
@@ -68,7 +73,11 @@ public class AccountController {
         );
     }
 
-    // 退出
+    /**
+     * 注销
+     *
+     * @return {@link Result}
+     */// 退出
     @ApiOperation("退出api")
     @PostMapping("/logout")
     @RequiresAuthentication
@@ -78,6 +87,12 @@ public class AccountController {
         return Result.succ(null);
     }
 
+    /**
+     * 注册
+     *
+     * @param loginDto 登录dto
+     * @return {@link Result}
+     */
     @ApiOperation("注册api")
     @PostMapping("/register")
     public Result register(@Validated @RequestBody LoginDto loginDto) {
@@ -101,7 +116,11 @@ public class AccountController {
         return Result.succ("注册成功");
     }
 
-    //获取验证码的请求路径
+    /**
+     * 验证码
+     *
+     * @return {@link Result}
+     *///获取验证码的请求路径
     @ApiOperation("获取验证码api")
     @GetMapping("/code")
     public Result captcha(){

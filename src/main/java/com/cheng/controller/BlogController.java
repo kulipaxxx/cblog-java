@@ -34,7 +34,12 @@ public class BlogController {
     @Autowired
     BlogService blogService;
 
-    //博客列表
+    /**
+     * 博客
+     *
+     * @param currentPage 当前页面
+     * @return {@link Result}
+     *///博客列表
     @ApiOperation("查询所有博客api")
     @GetMapping("/index")
     public Result blogs(Integer currentPage) {
@@ -45,6 +50,12 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
+    /**
+     * 细节
+     *
+     * @param id id
+     * @return {@link Result}
+     */
     @ApiOperation("博客详情api")
     @GetMapping("/detail/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
@@ -53,6 +64,13 @@ public class BlogController {
         return Result.succ(blog);
     }
 
+    /**
+     * 博客用户
+     *
+     * @param id          id
+     * @param currentPage 当前页面
+     * @return {@link Result}
+     */
     @ApiOperation("查询主页api")
     @GetMapping("/index/{id}")
     public Result blogsOfUser(@PathVariable(name = "id") Long id, Integer currentPage){
@@ -63,7 +81,12 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
-    //编辑
+    /**
+     * 编辑
+     *
+     * @param blog 博客
+     * @return {@link Result}
+     *///编辑
     @ApiOperation("发表、编辑博客api")
     @RequiresAuthentication
     @PostMapping("/edit")
@@ -85,7 +108,12 @@ public class BlogController {
         return Result.succ(null);
     }
 
-    //删除
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return {@link Result}
+     *///删除
     @ApiOperation("删除博客api")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long id){

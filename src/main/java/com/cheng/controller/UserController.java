@@ -27,6 +27,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * 指数
+     *
+     * @return {@link Result}
+     */
     @RequiresAuthentication
     @GetMapping("/index")
     public Result index() {
@@ -34,7 +39,12 @@ public class UserController {
         return Result.succ(user);
     }
 
-    //编辑用户信息
+    /**
+     * 保存
+     *
+     * @param user 用户
+     * @return {@link Result}
+     *///编辑用户信息
     @ApiOperation("保存用户信息api")
     @RequiresAuthentication //要求权限
     @PostMapping("/save")

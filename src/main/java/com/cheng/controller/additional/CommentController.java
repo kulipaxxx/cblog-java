@@ -67,11 +67,11 @@ public class CommentController {
     }
 
     /**
-     * 子评论
+     * 发表修改评论
      *
      * @param commentDto 评论dto
      * @return {@link Result}
-     *///发表评论
+     */
     @PostMapping("/sub")
     @RequiresAuthentication //要求权限
     public Result subComment(@Validated @RequestBody CommentDto commentDto){
@@ -121,4 +121,5 @@ public class CommentController {
 
         return Result.succ("删除成功");
     }
+
 }

@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 结果
+ *
+ * @author Administrator
+ * @date 2022/11/24
+ */
 @Data
 @ApiModel("统一结果返回")
 public class Result implements Serializable {
