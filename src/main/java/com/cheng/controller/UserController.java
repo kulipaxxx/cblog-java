@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping("/index")
     public Result index() {
         User user = userService.getById(1L);
-        return Result.succ(user);
+        return Result.success(user);
     }
 
     /**
@@ -51,6 +51,6 @@ public class UserController {
     public Result save(@Validated @RequestBody User user) {
         userService.saveOrUpdate(user);
 
-        return Result.succ(user);
+        return Result.success(user);
     }
 }

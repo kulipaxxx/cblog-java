@@ -1,7 +1,6 @@
 package com.cheng.common.exception;
 
 import com.cheng.common.lang.Result;
-import com.cheng.common.lang.Result1;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
 import org.springframework.http.HttpStatus;
@@ -21,25 +20,40 @@ import java.io.IOException;
 @RestControllerAdvice
 public class GlobalExcepitonHandler {
 
-    // 捕捉shiro的异常
+    /**
+     * handle401
+     *
+     * @param e e
+     * @return {@link Result}
+     */// 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(ShiroException.class)
+    @ExceptionHandler(value = ShiroException.class)
     public Result handle401(ShiroException e) {
         log.error("运行时异常：----------------{}", e);
-        return Result.fail(401, e.getMessage(), null);
+        return Result.error(401, e.getMessage());
     }
 
     /**
+     * 处理程序
      * 处理Assert的异常
+     *
+     * @param e e
+     * @return {@link Result}
+     * @throws IOException ioexception
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalArgumentException.class)
     public Result handler(IllegalArgumentException e) throws IOException {
         log.error("Assert异常:-------------->{}",e.getMessage());
-        return Result.fail(e.getMessage());
+        return Result.error(e.getMessage());
     }
 
     /**
+     * 处理程序
+     *
+     * @param e e
+     * @return {@link Result}
+     * @throws IOException ioexception
      * @Validated 校验错误异常处理
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -48,13 +62,20 @@ public class GlobalExcepitonHandler {
         log.error("运行时异常:-------------->",e);
         BindingResult bindingResult = e.getBindingResult();
         ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
-        return Result.fail(objectError.getDefaultMessage());
+        return Result.error(objectError.getDefaultMessage());
     }
 
+    /**
+     * 处理程序
+     *
+     * @param e e
+     * @return {@link Result}
+     * @throws IOException ioexception
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e) throws IOException {
         log.error("运行时异常:-------------->",e);
-        return Result.fail(e.getMessage());
+        return Result.error(e.getMessage());
     }
 }

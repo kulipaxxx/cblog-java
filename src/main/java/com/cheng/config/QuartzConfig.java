@@ -16,11 +16,21 @@ public class QuartzConfig {
 
     private static final String LIKE_TASK_IDENTITY = "LikeTaskQuartz";
 
+    /**
+     * 石英细节
+     *
+     * @return {@link JobDetail}
+     */
     @Bean
     public JobDetail quartzDetail(){
         return JobBuilder.newJob(LikeTask.class).withIdentity(LIKE_TASK_IDENTITY).storeDurably().build();
     }
 
+    /**
+     * 石英触发
+     *
+     * @return {@link Trigger}
+     */
     @Bean
     public Trigger quartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()

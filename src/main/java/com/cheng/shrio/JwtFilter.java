@@ -40,6 +40,15 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
 
+    /**
+     * 在访问被拒绝
+     * 是否是拒绝登录
+     * 没有登录的情况下会走此方法
+     * @param servletRequest  servlet请求
+     * @param servletResponse servlet响应
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -65,7 +74,7 @@ public class JwtFilter extends AuthenticatingFilter {
 
         Throwable throwable = e.getCause() == null ? e : e.getCause();
 
-        Result result = Result.fail(throwable.getMessage());
+        Result result = Result.error(throwable.getMessage());
         //转为json格式
         String json = JSONUtil.toJsonStr(result);
 

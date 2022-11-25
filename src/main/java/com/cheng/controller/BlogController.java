@@ -47,7 +47,7 @@ public class BlogController {
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
-        return Result.succ(pageData);
+        return Result.success(pageData);
     }
 
     /**
@@ -61,7 +61,7 @@ public class BlogController {
     public Result detail(@PathVariable(name = "id") Long id) {
         Blog blog = blogService.getById(id);
         Assert.notNull(blog, "该博客已删除！");
-        return Result.succ(blog);
+        return Result.success(blog);
     }
 
     /**
@@ -78,7 +78,7 @@ public class BlogController {
         Page page = new Page(currentPage, 5);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("user_id", id).orderByDesc("created"));
 
-        return Result.succ(pageData);
+        return Result.success(pageData);
     }
 
     /**
@@ -105,7 +105,7 @@ public class BlogController {
         BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         blogService.saveOrUpdate(temp);
 
-        return Result.succ(null);
+        return Result.success(null);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BlogController {
         Assert.notNull(blog,"删除失败，博客不存在");
 
         blogService.removeById(id);
-        return Result.succ("删除成功");
+        return Result.success("删除成功");
     }
 
 }

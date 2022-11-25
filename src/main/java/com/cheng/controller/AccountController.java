@@ -53,7 +53,7 @@ public class AccountController {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在");
         if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
-            return Result.fail("密码错误！");
+            return Result.error("密码错误！");
         }
         Assert.isTrue(redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()),"验证码错误");
 
@@ -61,7 +61,7 @@ public class AccountController {
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         // 用户可以另一个接口
-        return Result.succ(MapUtil.builder()
+        return Result.success(MapUtil.builder()
                 .put("id", user.getId())
                 .put("username", user.getUsername())
                 .put("avatar", user.getAvatar())
@@ -84,7 +84,7 @@ public class AccountController {
     public Result logout() {
         SecurityUtils.getSubject().logout();
 
-        return Result.succ(null);
+        return Result.success(null);
     }
 
     /**
@@ -113,7 +113,7 @@ public class AccountController {
         temp.setUsername(loginDto.getUsername());
         userService.save(temp);
 
-        return Result.succ("注册成功");
+        return Result.success("注册成功");
     }
 
     /**
@@ -153,6 +153,6 @@ public class AccountController {
         map.put("key", key);
         map.put("img", captcha.toBase64());
 
-        return Result.succ(map);
+        return Result.success(map);
     }
 }

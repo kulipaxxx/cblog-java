@@ -49,13 +49,13 @@ public class CommentController {
     BlogService blogService;
 
     /**
-     * 让博客评论
+     * 获取博客评论
      * @param id          id
      * @param currentPage 当前页面
      * @return {@link Result}
      */
     @GetMapping("/{id}")
-    public Result getBlogComment(@PathVariable("id")Long id,Integer currentPage){
+    public Result getBlogComment(@PathVariable("id")Long id, Integer currentPage){
         //分页查询
         if (currentPage==null || currentPage < 1)currentPage = 1;
         List<Object> list_user_id = redisUtil.lGet(String.valueOf(id), 0, redisUtil.lGetListSize(String.valueOf(id)));
@@ -63,7 +63,7 @@ public class CommentController {
         Page page = new Page(currentPage,5);
         IPage iPage = commentService.page(page, new QueryWrapper<Comment>().eq("blog_id", id));
 
-        return Result.succ(iPage);
+        return Result.success(iPage);
     }
 
     /**
@@ -78,7 +78,7 @@ public class CommentController {
         Blog id = blogService.getById(commentDto.getBlogId());
         Comment comment = new Comment();
         if (id == null){
-            return Result.fail("博客不存在");
+            return Result.error("博客不存在");
         }
         if (commentService.getById(commentDto.getId()) != null){//修改评论
             comment.setCreated(LocalDateTime.now());
@@ -103,7 +103,7 @@ public class CommentController {
         //保存到mysql
         commentService.save(comment);
 
-        return Result.succ(comment);
+        return Result.success(comment);
     }
 
     /**
@@ -119,7 +119,7 @@ public class CommentController {
         Assert.notNull(blog,"comment不存在");
         commentService.removeById(comment_id);
 
-        return Result.succ("删除成功");
+        return Result.success("删除成功");
     }
 
 }

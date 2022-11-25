@@ -1,58 +1,79 @@
 package com.cheng.common.lang;
 
+import com.cheng.common.lang.Enum.ResponseCode;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 结果
- *
- * @author Administrator
- * @date 2022/11/24
- */
 @Data
-@ApiModel("统一结果返回")
-public class Result implements Serializable {
+@ApiModel("统一结果封装")
+public class Result<T> implements Serializable {
 
-    @ApiModelProperty("访问状态")
-    private int code; // 200是正常，非200表示异常
-    @ApiModelProperty("返回信息")
+    private static final long serialVersionUID = 1L;
+    // 响应代码
+    private int code;
+    // 响应信息
     private String msg;
-    @ApiModelProperty("返回数据")
-    private Object data;
+    // 响应数据
+    private T data;
 
-    public static Result succ(Object data) {
-        return succ(ResultCode.SUCCESS, "操作成功", data);
+    /**
+     * 构造方法 私有不允许外部访问
+     */
+    private Result(int code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+    private Result(int code, T data) {
+        this.code = code;
+        this.data = data;
+    }
+    private Result(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+    private Result(int code) {
+        this.code = code;
     }
 
-    public static Result succ(String msg){
-        return succ(ResultCode.SUCCESS,msg,null);
+    /**
+     * 请求成功
+     * @param msg  返回信息
+     * @param data 泛型数据
+     * @param <T>  返回数据，可以不填
+     * @return 1.状态码（默认） 2.返回信息 3.泛型数据
+     */
+    public static <T> Result<T> success(String msg, T data) {
+        return new Result<T>(ResponseCode.SUCCESS.getCode(), msg, data);
+    }
+    public static <T> Result<T> success(T data) {
+        return new Result<T>(ResponseCode.SUCCESS.getCode(), data);
+    }
+    public static <T> Result<T> success(String msg) {
+        return new Result<T>(ResponseCode.SUCCESS.getCode(), msg);
+    }
+    public static <T> Result<T> success() {
+        return new Result<>(ResponseCode.SUCCESS.getCode());
     }
 
-    public static Result succ(int code, String msg, Object data) {
-        Result r = new Result();
-        r.setCode(code);
-        r.setMsg(msg);
-        r.setData(data);
-        return r;
+    /**
+     * 请求失败
+     * @param code
+     * @param msg
+     * @return 1.状态码（自定义） 2.返回信息（自定义）
+     */
+    public static <T> Result<T> error(int code, String msg) {
+        return new Result<>(code, msg);
     }
 
-    public static Result fail(String msg) {
-        return fail(ResultCode.FAILED, msg, null);
+    public static <T> Result<T> error() {
+        return new Result<T>(ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc());
     }
 
-    public static Result fail(String msg, Object data) {
-        return fail(ResultCode.FAILED, msg, data);
-    }
-
-    public static Result fail(int code, String msg, Object data) {
-        Result r = new Result();
-        r.setCode(code);
-        r.setMsg(msg);
-        r.setData(data);
-        return r;
+    public static <T> Result<T> error(String msg) {
+        return new Result<T>(ResponseCode.ERROR.getCode(), msg);
     }
 
 }

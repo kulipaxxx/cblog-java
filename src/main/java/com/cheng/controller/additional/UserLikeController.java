@@ -52,7 +52,7 @@ public class UserLikeController {
         Integer count = redisService.getLikedCount(blog_id);
         System.out.println("博客：" + blog_id + "点赞总数" + count);
 
-        return Result.succ(count);
+        return Result.success(count);
     }
 
     /**
@@ -78,7 +78,7 @@ public class UserLikeController {
             redisService.decrementLikedCount(likedUserId);
         }
 
-        return Result.succ(null);
+        return Result.success();
     }
 
 

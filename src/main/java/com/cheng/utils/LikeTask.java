@@ -21,6 +21,12 @@ public class LikeTask extends QuartzJobBean {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * 执行内部
+     *
+     * @param jobExecutionContext 工作执行上下文
+     * @throws JobExecutionException 作业执行异常
+     */
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
