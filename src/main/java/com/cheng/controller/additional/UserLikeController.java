@@ -64,7 +64,7 @@ public class UserLikeController {
      */
     @PostMapping("/clickL")
     public Result clickLike(@Validated @RequestBody LikeDto likeDto){
-        String likedUserId = likeDto.getLikedUserId();
+        String likedUserId = likeDto.getLikedBlogId();
         String giveLikedId = likeDto.getGiveLikedId();
         System.out.println(likeDto.toString());
         if (likeDto.getStatus() == 1){//是否点赞

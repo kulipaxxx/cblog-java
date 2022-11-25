@@ -51,7 +51,6 @@ public class UserController {
     public Result save(@Validated @RequestBody User user) {
         userService.saveOrUpdate(user);
 
-
         return Result.succ(user);
     }
 }
