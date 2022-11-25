@@ -60,7 +60,8 @@ public class CommentController {
         if (currentPage==null || currentPage < 1)currentPage = 1;
         List<Object> list_user_id = redisUtil.lGet(String.valueOf(id), 0, redisUtil.lGetListSize(String.valueOf(id)));
 
-        Page page = new Page(currentPage,5);
+        Page page = new Page(currentPage, 5);
+
         IPage iPage = commentService.page(page, new QueryWrapper<Comment>().eq("blog_id", id));
 
         return Result.success(iPage);

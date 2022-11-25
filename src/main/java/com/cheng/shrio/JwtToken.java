@@ -2,6 +2,12 @@ package com.cheng.shrio;
 
 import org.apache.shiro.authc.AuthenticationToken;
 
+/**
+ * jwt令牌
+ *
+ * @author Administrator
+ * @date 2022/11/25
+ */
 public class JwtToken implements AuthenticationToken {
     private String token;
     public JwtToken(String token) {
@@ -9,7 +15,7 @@ public class JwtToken implements AuthenticationToken {
     }
 
     /**
-     * 得到主
+     * Principal 身份信息：
      *
      * @return {@link Object}
      */
@@ -19,7 +25,7 @@ public class JwtToken implements AuthenticationToken {
     }
 
     /**
-     * 获得证书
+     * Credential 凭证信息
      *
      * @return {@link Object}
      */

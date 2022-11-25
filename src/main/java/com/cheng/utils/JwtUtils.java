@@ -24,7 +24,11 @@ public class JwtUtils {
     private String header;
 
     /**
+     * 生成令牌
      * 生成jwt token
+     *
+     * @param userId 用户id
+     * @return {@link String}
      */
     public String generateToken(long userId) {
         Date nowDate = new Date();
@@ -40,6 +44,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * 被标记要求
+     *
+     * @param token 令牌
+     * @return {@link Claims}
+     */
     public Claims getClaimByToken(String token) {
         try {
             return Jwts.parser()
@@ -53,8 +63,11 @@ public class JwtUtils {
     }
 
     /**
+     * 是否令牌过期
      * token是否过期
-     * @return  true：过期
+     *
+     * @param expiration 过期
+     * @return true：过期
      */
     public boolean isTokenExpired(Date expiration) {
         return expiration.before(new Date());
