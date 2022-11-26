@@ -22,17 +22,16 @@ spring:
       testOnReturn: false
       #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
       testWhileIdle: true
-      #连接保持空闲而不被驱逐的最小时间
-      timeBetweenEvictionRunsMillis: 60000
-      #用来检测连接是否有效的sql，要求是一个查询语句
-      validationQuery: SELECT 1 FROM DUAL
-      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-      filters: stat,wall,log4j
-      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      useGlobalDataSourceStat: true
+
   profiles:
     active: dev
+  #配置邮箱信息
+  mail:
+    host: smtp.qq.com
+    username: 1845472368@qq.com
+    password: lzxtmadkfdbubcfj
+    default-encoding: utf-8
+    protocol: smtp
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml

@@ -7,9 +7,11 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LoginDto;
+import com.cheng.common.dto.pwdDto;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
+import com.cheng.service.additionalService.MailService;
 import com.cheng.utils.JwtUtils;
 import com.cheng.utils.RedisUtil;
 import com.wf.captcha.ArithmeticCaptcha;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +40,8 @@ public class AccountController {
     UserService userService;
     @Autowired
     RedisUtil redisUtil;
-
+    @Autowired
+    MailService mailService;
     /**
      * 登录
      * 默认账号密码：cblog / 111111
@@ -93,9 +97,10 @@ public class AccountController {
      * @param loginDto 登录dto
      * @return {@link Result}
      */
+    @Async
     @ApiOperation("注册api")
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody LoginDto loginDto) {
+    public Result register(@Validated @RequestBody LoginDto loginDto) throws Exception {
         System.out.println(loginDto.toString());
         System.out.println(redisUtil.get(loginDto.getUuid()));
         System.out.println(!redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()));
@@ -112,6 +117,8 @@ public class AccountController {
         temp.setPassword(DigestUtil.md5Hex(loginDto.getPassword()));
         temp.setUsername(loginDto.getUsername());
         userService.save(temp);
+        //异步发送注册成功邮件
+        mailService.sendHtmlMail(loginDto.getEmail(),"register", loginDto);
 
         return Result.success("注册成功");
     }
@@ -148,6 +155,7 @@ public class AccountController {
         log.info("===============获取运算结果为=========:{}",result);
 
         String key = UUID.randomUUID().toString();
+        //存入redis缓存
         redisUtil.set(key,result,2);
         Map<String,Object> map = new HashMap<>();
         map.put("key", key);
@@ -156,5 +164,18 @@ public class AccountController {
         return Result.success(map);
     }
 
+    /**
+     * 得到密码
+     * 找回密码
+     *
+     * @param pwdDto pwd dto
+     * @return {@link Result}
+     */
+    @PostMapping("/getPassword")
+    public Result getPassword(@Validated @RequestBody pwdDto pwdDto) throws Exception {
+        Assert.isTrue(redisUtil.get(pwdDto.getUuid()).equals(pwdDto.getCode()),"验证码错误");
+        mailService.getPassword(pwdDto);
+        return Result.success("邮件已发送");
+    }
 
 }
