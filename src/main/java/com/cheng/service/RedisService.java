@@ -47,15 +47,30 @@ public interface RedisService {
          * @param likedBlogId
          */
         void decrementLikedCount(String likedBlogId);
+
         /**
-         * 获取Redis中存储的所有点赞数据
+         * 找到喜欢关系
+         * 喜欢关系
+         *
+         * @param likeBlogId     像博客id
+         * @param giveLikeUserId 给像用户id
+         * @return {@link Boolean}
+         */
+        Boolean findLikeRelation(String likeBlogId,String giveLikeUserId);
+
+        /**
+         * 得到喜欢数据
+         * 获取Redis中存储的所有点赞数据并删除
+         *
+         * @param flag 国旗
+         * @return {@link List}<{@link UserLike}>
+         */
+        List<UserLike> getLikedDataFromRedis(Boolean flag);
+
+        /**
+         * 获取Redis中存储的所有点赞数量并删除
          * @return
          */
-        List<UserLike> getLikedDataFromRedis();
-        /**
-         * 获取Redis中存储的所有点赞数量
-         * @return
-         */
-        List<LikedCountDTO> getLikedCountFromRedis();
+        List<LikedCountDTO> getLikedCountFromRedis(Boolean flag);
 
 }

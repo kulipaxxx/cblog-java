@@ -2,13 +2,13 @@ package com.cheng.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cheng.common.dto.LikedCountDTO;
-import com.cheng.utils.LikedStatusEnum;
 import com.cheng.entity.Blog;
 import com.cheng.entity.UserLike;
 import com.cheng.service.BlogService;
 import com.cheng.service.LikedService;
 import com.cheng.service.RedisService;
 import com.cheng.service.UserLikeService;
+import com.cheng.utils.LikedStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,21 @@ public class LikedServiceImpl implements LikedService {
      */
     @Override
     public UserLike getByLikedUserIdAndGiveLikedId(String likedBlogId, String giveLikedId) {
-        return userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
+        /*
+        先查缓存
+        缓存没有查数据库
+         */
+        System.out.println("点赞用户id为：" + giveLikedId);
+        boolean flag = false;
+        flag = redisService.findLikeRelation(likedBlogId, giveLikedId);
+        UserLike userLike = null;
+        if (!flag)//如果缓存没有查数据库是否有
+        {
+            userLike = userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
+        }else { // 如果存在缓存
+            userLike = new UserLike();
+        }
+        return userLike;
     }
 
     /**
@@ -80,7 +94,7 @@ public class LikedServiceImpl implements LikedService {
     @Override
     @Transactional //事务管理
     public void transLikedFromRedis2DB() {
-        List<UserLike> list = redisService.getLikedDataFromRedis();
+        List<UserLike> list = redisService.getLikedDataFromRedis(true);
         for (UserLike like : list) {
             UserLike ul = getByLikedUserIdAndGiveLikedId(like.getLikedBlogId(), like.getGiveLikedId());
             if (ul == null) {
@@ -100,11 +114,13 @@ public class LikedServiceImpl implements LikedService {
     @Override
     @Transactional
     public void transLikedCountFromRedis2DB() {
-        List<LikedCountDTO> list = redisService.getLikedCountFromRedis();
+        List<LikedCountDTO> list = redisService.getLikedCountFromRedis(true);
         for (LikedCountDTO dto : list) {
             UserLike user = userLikeService.getById(dto.getInfoId());
-            String userId = user.getLikedBlogId();
-
+            String userId = null;
+            if (user != null) {
+                userId = user.getLikedBlogId();
+            }
             Blog blog = blogService.getById(userId);
             //点赞数量属于无关紧要的操作，出错无需抛异常
             if (blog != null) {

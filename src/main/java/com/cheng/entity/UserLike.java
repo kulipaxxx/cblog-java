@@ -60,5 +60,6 @@ public class UserLike implements Serializable {
         this.status = value;
     }
 
+    public UserLike(){}
 
 }
