@@ -91,7 +91,6 @@ public class BlogController {
     @RequiresAuthentication
     @PostMapping("/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
-        System.out.println(blog.toString());
         Blog temp = null;
         if(blog.getId() != null) {//判别权限
             temp = blogService.getById(blog.getId());
@@ -101,10 +100,9 @@ public class BlogController {
             temp.setUserId(ShiroUtil.getProfile().getId());
             temp.setCreated(LocalDateTime.now());
             temp.setStatus(0);
+            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         }
-        BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         blogService.saveOrUpdate(temp);
-
         return Result.success(null);
     }
 

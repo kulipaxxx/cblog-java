@@ -7,6 +7,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LoginDto;
+import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
@@ -95,30 +96,31 @@ public class AccountController {
     /**
      * 注册
      *
-     * @param loginDto 登录dto
+     * @param registerDto 注册dto
      * @return {@link Result}
+     * @throws Exception 异常
      */
     @ApiOperation("注册api")
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody LoginDto loginDto) throws Exception {
-        System.out.println(loginDto.toString());
-        System.out.println(redisUtil.get(loginDto.getUuid()));
-        System.out.println(!redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()));
+    public Result register(@Validated @RequestBody RegisterDto registerDto) throws Exception {
+        System.out.println(registerDto.toString());
+        System.out.println(redisUtil.get(registerDto.getUuid()));
+        System.out.println(!redisUtil.get(registerDto.getUuid()).equals(registerDto.getCode()));
         User temp = null;
-        if (loginDto.getUsername() != null) {//判别是否重名
-            temp = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+        if (registerDto.getUsername() != null) {//判别是否重名
+            temp = userService.getOne(new QueryWrapper<User>().eq("username", registerDto.getUsername()));
             Assert.isNull(temp, "用户已存在");
         }
-        Assert.isTrue(redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()),"验证码错误");
+        Assert.isTrue(redisUtil.get(registerDto.getUuid()).equals(registerDto.getCode()),"验证码错误");
 
         temp = new User();
         temp.setCreated(LocalDateTime.now());
         temp.setStatus(0);
-        temp.setPassword(DigestUtil.md5Hex(loginDto.getPassword()));
-        temp.setUsername(loginDto.getUsername());
+        temp.setPassword(DigestUtil.md5Hex(registerDto.getPassword()));
+        temp.setUsername(registerDto.getUsername());
         userService.save(temp);
         //异步发送注册成功邮件
-        mailService.sendHtmlMail(loginDto.getEmail(),"register", loginDto);
+        mailService.sendHtmlMail(registerDto.getEmail(),"register", registerDto);
 
         return Result.success("注册成功");
     }

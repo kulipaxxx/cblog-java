@@ -59,6 +59,6 @@ public class UserLikeServiceImpl extends ServiceImpl<UserLikeMapper, UserLike> i
      */
     @Override
     public UserLike findByLikedUserIdAndLikedPostId(String likedBlogId, String giveLikedId) {
-        return null;
+       return userLikeMapper.selectOne(new QueryWrapper<UserLike>().eq("liked_blog_id",likedBlogId).eq("give_liked_id",giveLikedId));
     }
 }

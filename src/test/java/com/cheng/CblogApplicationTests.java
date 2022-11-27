@@ -2,10 +2,8 @@ package com.cheng;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cheng.common.dto.LoginDto;
 import com.cheng.mapper.UserMapper;
 import com.cheng.service.UserLikeService;
-import com.cheng.service.additionalService.MailService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +42,5 @@ class CblogApplicationTests {
         }
     }
 
-    @Autowired
-    MailService mailService;
-    @Test
-    void test2() throws Exception {
-        LoginDto loginDto = new LoginDto();
-        loginDto.setEmail("1845472368@qq.com");
-        loginDto.setUsername("橙子");
-        mailService.sendHtmlMail(loginDto.getEmail(),"这是一封邮件",loginDto);
-    }
 
 }

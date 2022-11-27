@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cheng.common.dto.LoginDto;
+import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
@@ -40,13 +40,13 @@ public class MailService {
     /**
      * 发送html邮件
      *
-     * @param to       接收者
-     * @param subject  主题
-     * @param loginDto 登录dto
+     * @param to          接收者
+     * @param subject     主题
+     * @param registerDto 注册dto
      * @throws Exception 异常
      * @Value注解读取配置文件中同名的配置值
      */
-    public void sendHtmlMail(String to, String subject, LoginDto loginDto) throws Exception {
+    public void sendHtmlMail(String to, String subject, RegisterDto registerDto) throws Exception {
         System.out.println(DateUtil.now());
         String content = "<div style=\"background-color:#ECECEC; padding: 35px;\">\n" +
                 "    <table cellpadding=\"0\" align=\"center\"\n" +
@@ -68,7 +68,7 @@ public class MailService {
                 "                        </font>\n" +
                 "                    </h2>\n" +
                 "                    <p>首先感谢您加入CHUB！下面是您的账号信息<br>\n" +
-                "                        您的账号：<b>"+ loginDto.getUsername() +"</b><br>\n" +
+                "                        您的账号：<b>"+ registerDto.getUsername() +"</b><br>\n" +
                 "                        您的密码：<b>*******</b><br>\n" +
                 "                        您的邮箱：<b>" + to + "</b><br>\n" +
                 "                        您注册时的日期：<b>"+ DateUtil.now() + "</b><br>\n" +
@@ -104,6 +104,15 @@ public class MailService {
         mailSender.send(message);
     }
 
+    /**
+     * 发送html邮件
+     *
+     * @param to      来
+     * @param subject 主题
+     * @param pwdDto  pwd dto
+     * @param pwd     松材线虫病
+     * @throws Exception 异常
+     */
     public void sendHtmlMail(String to, String subject, pwdDto pwdDto, String pwd) throws Exception {
         System.out.println(DateUtil.now());
         String content = "<div style=\"background-color:#ECECEC; padding: 35px;\">\n" +
