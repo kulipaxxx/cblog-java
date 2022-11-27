@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestController("/auth")
+@RestController
+@RequestMapping("/auth")
 @Api(description = "系统：授权接口")
 public class AccountController {
     @Autowired
@@ -42,6 +42,7 @@ public class AccountController {
     RedisUtil redisUtil;
     @Autowired
     MailService mailService;
+
     /**
      * 登录
      * 默认账号密码：cblog / 111111
@@ -97,7 +98,6 @@ public class AccountController {
      * @param loginDto 登录dto
      * @return {@link Result}
      */
-    @Async
     @ApiOperation("注册api")
     @PostMapping("/register")
     public Result register(@Validated @RequestBody LoginDto loginDto) throws Exception {
