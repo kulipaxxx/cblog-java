@@ -59,9 +59,11 @@ public class AccountController {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在");
         if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
-            return Result.error("密码错误！");
+            return Result.error("密码或账号错误！");
         }
-        Assert.isTrue(redisUtil.get(loginDto.getUuid()).equals(loginDto.getCode()),"验证码错误");
+        String code = (String) redisUtil.get(loginDto.getUuid());
+        Assert.notNull(code,"验证码已失效，请刷新验证码");
+        Assert.isTrue(code.equals(loginDto.getCode()),"验证码错误");
 
         String jwt = jwtUtils.generateToken(user.getId());
         response.setHeader("Authorization", jwt);
@@ -157,7 +159,7 @@ public class AccountController {
         log.info("===============获取运算结果为=========:{}",result);
 
         String key = UUID.randomUUID().toString();
-        //存入redis缓存
+        //存入redis缓存,过期时间两分钟
         redisUtil.set(key,result,2);
         Map<String,Object> map = new HashMap<>();
         map.put("key", key);
@@ -176,6 +178,8 @@ public class AccountController {
     @PostMapping("/getPassword")
     public Result getPassword(@Validated @RequestBody pwdDto pwdDto) throws Exception {
         Assert.isTrue(redisUtil.get(pwdDto.getUuid()).equals(pwdDto.getCode()),"验证码错误");
+        User email = userService.getOne(new QueryWrapper<User>().eq("username", pwdDto.getUsername()));
+        Assert.notNull(email,"用户不存在");
         mailService.getPassword(pwdDto);
         return Result.success("邮件已发送");
     }

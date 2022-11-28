@@ -173,7 +173,7 @@ public class MailService {
 
     public void getPassword(pwdDto pwdDto) throws Exception {
         User email = userService.getOne(new QueryWrapper<User>().eq("email", pwdDto.getEmail()));
-        Assert.notNull(email,"用户不存在");
+        Assert.notNull(email,"邮箱不匹配");
         String pwd = SecureUtil.md5(email.getPassword());
         sendHtmlMail(pwdDto.getEmail(),"找回密码",pwdDto, pwd);
     }
