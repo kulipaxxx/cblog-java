@@ -120,7 +120,7 @@ public class AccountController {
         temp.setUsername(registerDto.getUsername());
         userService.save(temp);
         //异步发送注册成功邮件
-        mailService.sendHtmlMail(registerDto.getEmail(),"register", registerDto);
+        mailService.sendHtmlMail(registerDto.getEmail(),"注册成功", registerDto);
 
         return Result.success("注册成功");
     }

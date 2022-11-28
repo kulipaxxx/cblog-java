@@ -68,7 +68,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Boolean findLikeRelation(String likeBlogId, String giveLikedId) {
         List<UserLike> userLikes = getLikedDataFromRedis(false);
-        Boolean flag = false;
+        boolean flag = false;
         for (UserLike userLike : userLikes) {
             if (userLike.getLikedBlogId().equals(likeBlogId)&&
                 userLike.getGiveLikedId().equals(giveLikedId)){//查找是否有缓存记录

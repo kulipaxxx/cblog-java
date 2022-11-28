@@ -175,6 +175,6 @@ public class MailService {
         User email = userService.getOne(new QueryWrapper<User>().eq("email", pwdDto.getEmail()));
         Assert.notNull(email,"用户不存在");
         String pwd = SecureUtil.md5(email.getPassword());
-        sendHtmlMail(pwdDto.getEmail(),"get",pwdDto, pwd);
+        sendHtmlMail(pwdDto.getEmail(),"找回密码",pwdDto, pwd);
     }
 }

@@ -54,10 +54,10 @@ public class UserLike implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public UserLike(String likedBlogId,String giveLikedId,Integer value){
+    public UserLike(String likedBlogId,String giveLikedId,Integer status){
         this.likedBlogId = likedBlogId;
         this.giveLikedId = giveLikedId;
-        this.status = value;
+        this.status = status;
     }
 
     public UserLike(){}

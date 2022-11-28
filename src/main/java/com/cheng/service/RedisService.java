@@ -31,7 +31,7 @@ public interface RedisService {
          */
         void deleteLikedFromRedis(String likedBlogId, String giveLikeId);
         /**
-         * 该用户的点赞数加1
+         * 该博客的点赞数加1
          * @param likedBlogId
          */
         void incrementLikedCount(String likedBlogId);
@@ -43,7 +43,7 @@ public interface RedisService {
          */
         Integer getLikedCount(String likedBlogId);
         /**
-         * 该用户的点赞数减1
+         * 该博客的点赞数减1
          * @param likedBlogId
          */
         void decrementLikedCount(String likedBlogId);

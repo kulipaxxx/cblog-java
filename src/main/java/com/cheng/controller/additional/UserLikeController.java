@@ -2,9 +2,12 @@ package com.cheng.controller.additional;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LikeDto;
 import com.cheng.common.lang.Result;
+import com.cheng.entity.Blog;
 import com.cheng.entity.UserLike;
+import com.cheng.service.BlogService;
 import com.cheng.service.LikedService;
 import com.cheng.service.RedisService;
 import com.cheng.service.UserLikeService;
@@ -13,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -38,6 +43,8 @@ public class UserLikeController {
     @Autowired
     UserLikeService userLikeService;
 
+    @Autowired
+    BlogService blogService;
     /**
      * 得到clickl
      * 获取当前博客点赞量
@@ -53,8 +60,10 @@ public class UserLikeController {
          */
         Integer count = redisService.getLikedCount(id);
         log.info("博客："+ id + "点赞总数" + count);
-        if (count == null){
-
+        if (count == null){ //如果缓存没有查数据库
+            Blog blog = blogService.getOne(new QueryWrapper<Blog>().eq("id", id));
+            log.info("查询出来的blogLikeCount:" + blog.getLikeCount());
+            count = blog.getLikeCount();
         }
         return Result.success(MapUtil.builder()
                 .put("count",count)
@@ -70,18 +79,25 @@ public class UserLikeController {
      */
     @PostMapping("/clickL")
     public Result clickLike(@Validated @RequestBody LikeDto likeDto){
-        String likedUserId = likeDto.getLikedBlogId();
+        String likeBlogId = likeDto.getLikedBlogId();
         String giveLikedId = likeDto.getGiveLikedId();
         log.info("点赞信息" + likeDto.toString());
         if (likeDto.getStatus() == 1){//是否点赞
-            redisService.saveLiked2Redis(likedUserId, giveLikedId);
+            redisService.saveLiked2Redis(likeBlogId, giveLikedId);
             //点赞总数加一
-            redisService.incrementLikedCount(likedUserId);
-        }else {//取消点赞
-            redisService.unlikeFromRedis(likedUserId, giveLikedId);
-            redisService.deleteLikedFromRedis(likedUserId, giveLikedId);//删除点赞记录
-            //点赞总数减一
-            redisService.decrementLikedCount(likedUserId);
+            redisService.incrementLikedCount(likeBlogId);
+        }else {
+            //缓存 取消点赞
+            redisService.unlikeFromRedis(likeBlogId, giveLikedId);
+            //缓存删除点赞记录
+            redisService.deleteLikedFromRedis(likeBlogId, giveLikedId);
+            //缓存点赞总数减一
+            redisService.decrementLikedCount(likeBlogId);
+            //数据库更新
+            UserLike userLike = new UserLike();
+            userLike.setUpdateTime(LocalDateTime.now());
+            userLike.setStatus(0);
+            userLikeService.saveOrUpdate(userLike);
         }
         return Result.success();
     }
