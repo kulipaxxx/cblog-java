@@ -33,7 +33,7 @@ public class FileController {
     /**
      * 获取归档信息
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Result getFileInfo(@PathVariable("id") long userId) {
         List<Blog> blogs = blogService.list(new QueryWrapper<Blog>().eq("user_id", userId));
         ArrayList<FileVo> fileList = new ArrayList<>();
