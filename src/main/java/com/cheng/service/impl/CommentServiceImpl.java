@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 用户评论表 服务实现类
  * </p>
  *
  * @author author: cheng
- * @since 2022-11-15
+ * @since 2022-11-29
  */
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
