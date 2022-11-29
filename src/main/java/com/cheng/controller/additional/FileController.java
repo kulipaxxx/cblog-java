@@ -5,6 +5,7 @@ import com.cheng.common.lang.Result;
 import com.cheng.controller.vo.FileVo;
 import com.cheng.entity.Blog;
 import com.cheng.service.BlogService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class FileController {
      * 获取归档信息
      */
     @GetMapping("/{id}")
+    @RequiresAuthentication
     public Result getFileInfo(@PathVariable("id") long userId) {
         List<Blog> blogs = blogService.list(new QueryWrapper<Blog>().eq("user_id", userId));
         ArrayList<FileVo> fileList = new ArrayList<>();

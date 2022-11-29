@@ -1,7 +1,8 @@
 package com.cheng.service;
 
-import com.cheng.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cheng.common.dto.CommentDto;
+import com.cheng.entity.Comment;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-11-29
  */
 public interface CommentService extends IService<Comment> {
-
+    boolean removeComment(CommentDto commentDto);
 }
