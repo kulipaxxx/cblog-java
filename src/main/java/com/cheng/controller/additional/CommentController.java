@@ -7,11 +7,15 @@ import com.cheng.common.dto.CommentDto;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.Comment;
 import com.cheng.service.CommentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +29,9 @@ import java.util.Map;
  * @author author: cheng
  * @since 2022-11-29
  */
+@Slf4j
 @RestController
-@RequestMapping("/api/Comment")
+@RequestMapping("/api/comment")
 public class CommentController {
 
     @Autowired
@@ -53,16 +58,17 @@ public class CommentController {
     }
 
     /**
+     * 修改评论
      * 添加评论
      *
-     * @param commentDto 评论dto
+     * @param comment 评论
      * @return {@link Result}
      */
     @RequestMapping(method = RequestMethod.POST,path = "/alterComment")
-    public Result alterComment(CommentDto commentDto){
-        Comment comment = new Comment();
-        BeanUtil.copyProperties(commentDto,comment);
-        boolean save = commentService.save(comment);
+    public Result alterComment(@Validated @RequestBody Comment comment){
+        log.info("添加Comment信息为{}", comment.toString());
+        comment.setCreateTime(LocalDateTime.now());
+        boolean save = commentService.saveOrUpdate(comment);
         String msg;
         if (save){
             msg = "评论成功";
@@ -74,7 +80,7 @@ public class CommentController {
     }
 
     @RequestMapping(method = RequestMethod.POST,path = "/removeComment")
-    public Result removeComent(CommentDto commentDto){
+    public Result removeComment(CommentDto commentDto){
         boolean flag = commentService.removeComment(commentDto);
         String msg;
         if (flag){
