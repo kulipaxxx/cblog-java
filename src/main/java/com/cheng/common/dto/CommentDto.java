@@ -1,5 +1,6 @@
 package com.cheng.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class CommentDto implements Serializable {
     private Long userId;          // 评论作者ID
     @NotBlank(message = "评论作者姓名不能为空")
     private String userName;      // 评论作者姓名
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;      // 创建时间
     private Integer isDelete;     // 是否删除（0：未删除；1：已删除）
     @NotBlank(message = "博客ID为空")

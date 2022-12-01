@@ -72,7 +72,9 @@ public class RedisServiceImpl implements RedisService {
         for (UserLike userLike : userLikes) {
             if (userLike.getLikedBlogId().equals(likeBlogId)&&
                 userLike.getGiveLikedId().equals(giveLikedId)){//查找是否有缓存记录
-                flag = true;
+                if (userLike.getStatus() == 1){
+                    flag = true;
+                }
                 break;
             }
         }

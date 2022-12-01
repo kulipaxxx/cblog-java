@@ -1,6 +1,7 @@
 package com.cheng.controller.additional;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LikeDto;
@@ -65,6 +66,8 @@ public class UserLikeController {
             log.info("查询出来的blogLikeCount:" + blog.getLikeCount());
             count = blog.getLikeCount();
         }
+        if (count < 0)
+            count = 0;
         return Result.success(MapUtil.builder()
                 .put("count",count)
                 .map());
@@ -95,9 +98,10 @@ public class UserLikeController {
             redisService.decrementLikedCount(likeBlogId);
             //数据库更新
             UserLike userLike = new UserLike();
+            BeanUtil.copyProperties(likeDto,userLike);
             userLike.setUpdateTime(LocalDateTime.now());
-            userLike.setStatus(0);
-            userLikeService.saveOrUpdate(userLike);
+            System.out.println("更新点赞状态：" + userLike.toString());
+            userLikeService.update(userLike,new QueryWrapper<UserLike>().eq("liked_blog_id",likeBlogId).eq("give_liked_id",giveLikedId));
         }
         return Result.success();
     }
@@ -112,7 +116,6 @@ public class UserLikeController {
      */
     @GetMapping("/likeRelationships/{blogId}/{userId}")
     public Result likeRelationships(@PathVariable String blogId, @PathVariable String userId){
-        System.out.println("信息" + blogId + "  " + userId);
         boolean status = false;
         /*
         1.查询是否存在点赞关系

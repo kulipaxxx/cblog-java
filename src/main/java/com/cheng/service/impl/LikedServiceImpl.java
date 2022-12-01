@@ -78,14 +78,17 @@ public class LikedServiceImpl implements LikedService {
         System.out.println("点赞用户id为：" + giveLikedId);
         boolean flag = false;
         flag = redisService.findLikeRelation(likedBlogId, giveLikedId);
-        UserLike userLike = null;
+        UserLike userLike1 = null;
         if (!flag)//如果缓存没有查数据库是否有
         {
-            userLike = userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
+            UserLike userLike = userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
+            if (userLike.getStatus() == 1){//点赞状态为1则
+                userLike1 = new UserLike();
+            }
         }else { // 如果存在缓存
-            userLike = new UserLike();
+            userLike1 = new UserLike();
         }
-        return userLike;
+        return userLike1;
     }
 
     /**
