@@ -10,10 +10,7 @@ import com.cheng.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +42,7 @@ public class CommentController {
      */
     @RequestMapping(method = RequestMethod.GET,path = "/getComments")
     public Result getComments(Long blogId){
+        log.info("评论模块：获取到的博客id:{}", blogId);
         List<Comment> comments = commentService.list(new QueryWrapper<Comment>().eq("blog_id", blogId));
         ArrayList<CommentDto> list = new ArrayList<>();
         //循环集合
@@ -54,6 +52,7 @@ public class CommentController {
             list.add(dto);
         }
         processComments(list);
+        log.info("评论模块：返回前端评论数据:{}", list.toString());
         return Result.success(list);
     }
 
