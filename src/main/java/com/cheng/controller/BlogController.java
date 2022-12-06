@@ -12,6 +12,7 @@ import com.cheng.service.BlogService;
 import com.cheng.utils.ShiroUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
  * @since 2022-10-31
  */
 @RestController
+@Slf4j
 @RequestMapping("/api/blog")
 @Api(description = "系统：博客模块")
 public class BlogController {
@@ -43,10 +45,12 @@ public class BlogController {
     @ApiOperation("查询所有博客api")
     @GetMapping("/index")
     public Result blogs(Integer currentPage) {
+        log.info("currentPage{}", currentPage);
         //分页
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
+
         return Result.success(pageData);
     }
 

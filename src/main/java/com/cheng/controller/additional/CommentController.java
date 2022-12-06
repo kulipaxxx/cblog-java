@@ -51,6 +51,7 @@ public class CommentController {
             BeanUtil.copyProperties(comment, dto);
             list.add(dto);
         }
+        log.info("评论模块：获取到数据库数据:{}", comments.toString());
         List<CommentDto> commentDtos = processComments(list);
         log.info("评论模块：返回前端评论数据:{}", commentDtos.toString());
         return Result.success(commentDtos);

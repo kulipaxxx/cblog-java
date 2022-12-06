@@ -66,8 +66,10 @@ public class UserLikeController {
             log.info("查询出来的blogLikeCount:" + blog.getLikeCount());
             count = blog.getLikeCount();
         }
-        if (count < 0)
+        if (count == null)
             count = 0;
+//        else if (count < 0)
+//            count = 0;
         return Result.success(MapUtil.builder()
                 .put("count",count)
                 .map());

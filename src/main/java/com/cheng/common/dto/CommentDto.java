@@ -35,7 +35,7 @@ public class CommentDto implements Serializable {
     private Long blogId;      // 博客ID
     private Long parentId;    // 父评论ID（被回复的评论）
     private Long rootParentId;      // 根评论ID（最顶级的评论）
-
+    private Boolean inputShow; //input展示
     private List<CommentDto> child;    // 本评论下的子评论
 }
 

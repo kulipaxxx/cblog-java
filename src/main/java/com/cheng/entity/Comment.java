@@ -75,6 +75,8 @@ public class Comment implements Serializable {
      * 根评论id
      */
     private Long rootParentId;
-
-
+    /**
+     *  input展示
+     */
+    private Boolean inputShow;
 }
