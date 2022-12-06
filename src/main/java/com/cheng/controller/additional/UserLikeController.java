@@ -68,8 +68,8 @@ public class UserLikeController {
         }
         if (count == null)
             count = 0;
-//        else if (count < 0)
-//            count = 0;
+        else if (count < 0)
+            count = 0;
         return Result.success(MapUtil.builder()
                 .put("count",count)
                 .map());
