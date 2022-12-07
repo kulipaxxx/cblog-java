@@ -18,5 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("admin: 用户管理模块")
 public class UserConsoleController {
 
+    /**
+     *  角色管理
+     */
 
+    /**
+     * 权限管理
+     */
 }
