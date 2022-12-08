@@ -1,9 +1,17 @@
 package com.cheng.controller.admin.user;
 
+import cn.hutool.core.lang.Assert;
+import com.cheng.common.lang.Result;
+import com.cheng.entity.User;
+import com.cheng.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 用户角色控制器
@@ -21,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("admin: 用户管理模块")
 public class UserRoleController {
 
+    @Autowired
+    UserService userService;
     /**
      *  角色管理 判断有无权限访问shrio
      *  1.获取所有角色
@@ -30,4 +40,35 @@ public class UserRoleController {
      */
 
 
+    /**
+     * 得到所有用户
+     *
+     * @return {@link Result}
+     */
+    @GetMapping("/getRoles")
+    public Result getAllUsers(){
+        List<User> users = userService.list();
+        Assert.notNull(users,"没有用户存在");
+        return Result.success(users);
+    }
+
+    /**
+     * 编辑角色
+     * 编辑，新添角色
+     *
+     * @param user 用户
+     * @return {@link Result}
+     */
+    @PostMapping("/edit")
+    public Result editRoles(@Validated @RequestBody User user){
+        User temp = null;
+        if (user.getId() != null) {//存在用户，进行编辑更新操作
+
+        }else {//不存在，进行新增操作
+            temp = new User();
+            temp.setCreated(LocalDateTime.now());
+        }
+
+        return Result.success(null);
+    }
 }

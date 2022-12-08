@@ -65,6 +65,11 @@ public class AccountController {
         Assert.notNull(code,"验证码已失效，请刷新验证码");
         Assert.isTrue(code.equals(loginDto.getCode()),"验证码错误");
 
+        //更新登录时间
+        user.setLastLogin(LocalDateTime.now());
+        userService.update(new QueryWrapper<User>().eq("username", loginDto.getUsername()).setEntity(user));
+
+        //获取当前用户id作为shrio主id
         String jwt = jwtUtils.generateToken(user.getId());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
