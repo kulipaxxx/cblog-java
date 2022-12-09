@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/admin/user/Auths")
+@RequestMapping("/admin/user/auths")
 @Api("admin: 用户管理模块")
 public class UserAuthsController {
     /**
-     * 权限管理 判断有无权限访问 通过shrio实现
+     * 权限管理 判断有无权限访问 通过shiro实现
      *  1.判断有无权限
      *  1.赋予权限
      *  2.

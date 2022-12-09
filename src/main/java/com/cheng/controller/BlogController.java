@@ -98,14 +98,14 @@ public class BlogController {
         Blog temp = null;
         if(blog.getId() != null) {//判别权限
             temp = blogService.getById(blog.getId());
-            Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
+            Assert.isTrue(temp.getUserId().equals(ShiroUtil.getProfile().getId()), "没有权限编辑");
         } else {
             temp = new Blog();
             temp.setUserId(ShiroUtil.getProfile().getId());
             temp.setCreated(LocalDateTime.now());
             temp.setStatus(0);
-            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         }
+        BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
         blogService.saveOrUpdate(temp);
         return Result.success(null);
     }
