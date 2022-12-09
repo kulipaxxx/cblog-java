@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("admin: 用户管理模块")
 public class UserAuthsController {
     /**
-     * 权限管理 判断有无权限访问 通过shiro实现
+     * 权限管理 判断有无权限访问 通过shiro实现，暂未实现
      *  1.判断有无权限
      *  1.赋予权限
      *  2.
