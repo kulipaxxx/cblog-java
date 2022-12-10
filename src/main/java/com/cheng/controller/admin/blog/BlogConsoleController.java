@@ -6,6 +6,7 @@ import com.cheng.common.lang.Result;
 import com.cheng.entity.Blog;
 import com.cheng.service.BlogService;
 import com.cheng.utils.ShiroUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -24,7 +25,8 @@ import java.time.LocalDateTime;
 @Slf4j
 @RestController
 @RequestMapping("/admin/blog")
-public class BlogConsoleCtroller {
+@Api("admin: 博客管理模块")
+public class BlogConsoleController {
     @Autowired
     BlogService blogService;
     /**

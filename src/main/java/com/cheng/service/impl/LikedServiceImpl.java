@@ -43,6 +43,7 @@ public class LikedServiceImpl implements LikedService {
 
     /**
      * 获取该用户被点赞信息
+     *
      * @param likedBlogId 被点赞人的id
      * @param currentPage
      * @return
@@ -54,6 +55,7 @@ public class LikedServiceImpl implements LikedService {
 
     /**
      * 根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
+     *
      * @param giveLikedId
      * @param currentPage
      * @return
@@ -64,7 +66,8 @@ public class LikedServiceImpl implements LikedService {
     }
 
     /**
-     *通过被点赞人和点赞人id查询是否存在点赞记录
+     * 通过被点赞人和点赞人id查询是否存在点赞记录
+     *
      * @param likedBlogId
      * @param giveLikedId
      * @return
@@ -82,10 +85,11 @@ public class LikedServiceImpl implements LikedService {
         if (!flag)//如果缓存没有查数据库是否有
         {
             UserLike userLike = userLikeService.findByLikedUserIdAndLikedPostId(likedBlogId, giveLikedId);
-            if (userLike.getStatus() == 1){//点赞状态为1则
-                userLike1 = new UserLike();
-            }
-        }else { // 如果存在缓存
+            if (userLike != null)
+                if (userLike.getStatus() == 1) {//点赞状态为1则
+                    userLike1 = new UserLike();
+                }
+        } else { // 如果存在缓存
             userLike1 = new UserLike();
         }
         return userLike1;

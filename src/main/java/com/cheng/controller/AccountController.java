@@ -67,7 +67,7 @@ public class AccountController {
 
         //更新登录时间
         user.setLastLogin(LocalDateTime.now());
-        userService.update(new QueryWrapper<User>().eq("username", loginDto.getUsername()).setEntity(user));
+        userService.update(user,new QueryWrapper<User>().eq("username", loginDto.getUsername()));
 
         //获取当前用户id作为shrio主id
         String jwt = jwtUtils.generateToken(user.getId());

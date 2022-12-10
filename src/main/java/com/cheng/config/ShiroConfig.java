@@ -59,8 +59,24 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
 
-        filterMap.put("/**", "jwt");
+
+        //配置shiro的内置过滤器
+        /*
+            anon：匿名拦截器，不需要登录即可访问的资源，匿名用户或游客，一般用于过滤静态资源。
+            authc：需要认证登录才能访问
+            user：用户拦截器，表示必须存在用户
+            perms：权限授权拦截器，验证用户是否拥有权限
+                参数可写多个，表示需要某些权限才能通过，多个参数时写 perms[“user, admin”]，当有多个参数时必须每个参数都通过才算可以
+            roles：角色授权拦截器，验证用户是或否拥有角色。
+                   参数可写多个，表示某些角色才能通过，多个参数时写 roles[“admin,user”]，当有多个参数时必须每个参数都通过才算通过
+
+         */
+        filterMap.put("/admin/user/*", "roles[admin]");
+        filterMap.put("/admin/blog/*", "roles[admin,user]");
+        filterMap.put("/**", "jwt");// 主要通过注解方式校验权限
+
         chainDefinition.addPathDefinitions(filterMap);
+
         return chainDefinition;
     }
 
@@ -79,6 +95,9 @@ public class ShiroConfig {
         Map<String, String> filterMap = shiroFilterChainDefinition.getFilterChainMap();
 
         shiroFilter.setFilterChainDefinitionMap(filterMap);
+
+        shiroFilter.setUnauthorizedUrl("/unauth");
+
         return shiroFilter;
     }
 
