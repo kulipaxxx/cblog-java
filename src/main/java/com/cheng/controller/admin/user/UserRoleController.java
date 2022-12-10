@@ -7,6 +7,7 @@ import com.cheng.entity.User;
 import com.cheng.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class UserRoleController {
      *
      * @return {@link Result}
      */
+    //@RequiresAuthentication
     @GetMapping("/getRoles")
     public Result getAllUsers() {
         List<User> users = userService.list();
@@ -61,6 +63,7 @@ public class UserRoleController {
      * @param user 用户
      * @return {@link Result}
      */
+    @RequiresAuthentication
     @PostMapping("/edit")
     public Result editRoles(@Validated @RequestBody User user) {
         User temp = null;
@@ -82,6 +85,7 @@ public class UserRoleController {
      * @param id id
      * @return {@link Result}
      */
+    @RequiresAuthentication
     @DeleteMapping("{id}")
     public Result deleteRoles(@PathVariable long id){
         User user = userService.getById(id);
