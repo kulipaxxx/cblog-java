@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LoginDto;
 import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
+import com.cheng.common.lang.Enum.ResponseCode;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
@@ -189,4 +190,8 @@ public class AccountController {
         return Result.success("邮件已发送");
     }
 
+    @GetMapping("/unauth")
+    public Result unauth(){
+        return Result.error(ResponseCode.PERMISSIONS_ARGUMENT.getCode(),"没有权限访问");
+    }
 }

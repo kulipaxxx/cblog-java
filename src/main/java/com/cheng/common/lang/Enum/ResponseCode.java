@@ -11,9 +11,9 @@ public enum ResponseCode implements Serializable {
     // 成功返回
     SUCCESS(200, "SUCCESS"),
     // 执行错误
-    ERROR(101, "ERROR"),
+    ERROR(400, "ERROR"),
     // 参数错误
-    ILLEGAL_ARGUMENT(102, "ILLEGAL_ARGUMENT");
+    PERMISSIONS_ARGUMENT(403, "PERMISSIONS_ARGUMENT");
     private static final long serialVersionUID = 1L;
     private final int code;
     private final String desc;
