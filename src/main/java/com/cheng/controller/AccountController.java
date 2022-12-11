@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@RequiresRoles("roles[admin]")
 @Api(description = "系统：授权接口")
 public class AccountController {
     @Autowired
@@ -190,6 +192,7 @@ public class AccountController {
         return Result.success("邮件已发送");
     }
 
+    @CrossOrigin //运行跨越资源请求
     @GetMapping("/unauth")
     public Result unauth(){
         return Result.error(ResponseCode.PERMISSIONS_ARGUMENT.getCode(),"没有权限访问");

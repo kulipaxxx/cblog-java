@@ -48,7 +48,6 @@ public class User implements Serializable {
     private String email;
 
     @ApiModelProperty("用户密码")
-    @NotBlank(message = "密码不能为空")
     private String password;
 
     @ApiModelProperty("用户状态")
