@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.cheng.common.lang.Result;
 import com.cheng.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExpiredCredentialsException;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtFilter extends AuthenticatingFilter {
     @Autowired
@@ -79,6 +81,7 @@ public class JwtFilter extends AuthenticatingFilter {
         String json = JSONUtil.toJsonStr(result);
 
         try {
+            log.info("登录失败返回前端json{}" , json);
             resp.getWriter().print(json);
         } catch (IOException e1) {
 

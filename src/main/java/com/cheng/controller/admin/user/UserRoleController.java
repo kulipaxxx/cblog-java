@@ -7,6 +7,7 @@ import com.cheng.entity.User;
 import com.cheng.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,7 @@ public class UserRoleController {
      *
      * @return {@link Result}
      */
-    //@RequiresAuthentication
+    @RequiresRoles("admin")
     @GetMapping("/getRoles")
     public Result getAllUsers() {
         List<User> users = userService.list();

@@ -71,6 +71,7 @@ public class ShiroConfig {
                    参数可写多个，表示某些角色才能通过，多个参数时写 roles[“admin,user”]，当有多个参数时必须每个参数都通过才算通过
 
          */
+        //filterMap.put("/admin/user/**","jwt[admin]");
         filterMap.put("/**", "jwt");// 主要通过注解方式校验权限
 
         chainDefinition.addPathDefinitions(filterMap);
@@ -94,7 +95,7 @@ public class ShiroConfig {
 
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
-        shiroFilter.setLoginUrl("/auth/unauth");
+        //shiroFilter.setLoginUrl("/auth/unauth");
 
         return shiroFilter;
     }

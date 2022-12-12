@@ -3,6 +3,7 @@ package com.cheng.common.exception;
 import com.cheng.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -21,6 +22,19 @@ import java.io.IOException;
 public class GlobalExcepitonHandler {
 
     /**
+     * handle403
+     *
+     * @param e e
+     * @return {@link Result}
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AuthorizationException.class)
+    public Result handle403(AuthorizationException e) {
+        log.error("权限异常：----------------{}", e.getCause());
+        return Result.error(403, e.getMessage());
+    }
+
+    /**
      * handle401
      *
      * @param e e
@@ -29,7 +43,7 @@ public class GlobalExcepitonHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = ShiroException.class)
     public Result handle401(ShiroException e) {
-        log.error("运行时异常：----------------{}", e);
+        log.error("运行时异常：----------------{}", e.getCause());
         return Result.error(401, e.getMessage());
     }
 
