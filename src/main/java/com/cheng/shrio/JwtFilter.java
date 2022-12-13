@@ -33,7 +33,7 @@ public class JwtFilter extends AuthenticatingFilter {
         System.out.println("创建token");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String jwt = request.getHeader("Authorization");
-        System.out.println("jwt是否为空：" + jwt == null);
+        System.out.println("jwt是否为空：" + (jwt==null));
         if(!StringUtils.hasText(jwt)){//如果没有token
             return null;
         }

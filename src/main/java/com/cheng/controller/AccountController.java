@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.LoginDto;
 import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
-import com.cheng.common.lang.Enum.ResponseCode;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
@@ -21,7 +20,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -74,6 +72,7 @@ public class AccountController {
 
         //获取当前用户id作为shrio主id
         String jwt = jwtUtils.generateToken(user.getId());
+        log.info("jwt{}", jwt);
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         // 用户可以另一个接口
@@ -94,9 +93,9 @@ public class AccountController {
      *
      * @return {@link Result}
      */// 退出
+    //@RequiresAuthentication
     @ApiOperation("退出api")
     @PostMapping("/logout")
-    @RequiresAuthentication
     public Result logout() {
         SecurityUtils.getSubject().logout();
 
@@ -168,6 +167,7 @@ public class AccountController {
 
         String key = UUID.randomUUID().toString();
         //存入redis缓存,过期时间两分钟
+        log.info("===============获取运算结果为=========:{}", key);
         redisUtil.set(key,result,2);
         Map<String,Object> map = new HashMap<>();
         map.put("key", key);
@@ -192,9 +192,4 @@ public class AccountController {
         return Result.success("邮件已发送");
     }
 
-    @CrossOrigin //运行跨越资源请求
-    @GetMapping("/unauth")
-    public Result unauth(){
-        return Result.error(ResponseCode.PERMISSIONS_ARGUMENT.getCode(),"没有权限访问");
-    }
 }

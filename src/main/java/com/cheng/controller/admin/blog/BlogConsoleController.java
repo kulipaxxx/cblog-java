@@ -9,6 +9,7 @@ import com.cheng.utils.ShiroUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class BlogConsoleController {
      * @param blog 博客
      * @return {@link Result}
      *///编辑
+    @RequiresAuthentication
     @ApiOperation("发表、编辑博客api")
     @PostMapping("/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
@@ -58,6 +60,7 @@ public class BlogConsoleController {
      * @param id id
      * @return {@link Result}
      *///删除
+    @RequiresAuthentication
     @ApiOperation("删除博客api")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long id){
