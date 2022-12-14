@@ -1,7 +1,10 @@
 package com.cheng.service;
 
-import com.cheng.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cheng.entity.User;
+import com.cheng.entity.role.Record;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,6 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-10-31
  */
 public interface UserService extends IService<User> {
-
-
+    List<Record> getRoles(Long id);
 }

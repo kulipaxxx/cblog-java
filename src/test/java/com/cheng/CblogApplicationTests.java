@@ -2,13 +2,16 @@ package com.cheng;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cheng.mapper.UserMapper;
+import com.cheng.entity.role.Record;
 import com.cheng.service.UserLikeService;
+import com.cheng.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,7 +31,7 @@ class CblogApplicationTests {
     }
 
     @Autowired
-    UserMapper userMapper;
+    UserService userService;
 
     @Autowired
     UserLikeService userLikeService;
@@ -39,6 +42,18 @@ class CblogApplicationTests {
         Object[] objects = iPage.getRecords().toArray();
         for (Object object : objects) {
             System.out.println(object.toString());
+        }
+    }
+
+    @Test
+    void testJoin(){
+        List<Record> test = userService.getRoles(1L);
+
+        //方法引用运算符
+        test.forEach(System.out::println);
+
+        for (Record record : test) {
+            System.out.println(record.getString("sn"));
         }
     }
 

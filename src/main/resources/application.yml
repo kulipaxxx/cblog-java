@@ -5,23 +5,23 @@ spring:
     url: jdbc:mysql://localhost:3306/cblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
-#    druid:
-#      ## 初始化大小，最小，最大
-#      initialSize: 5
-#      minIdle: 5
-#      maxActive: 20
-#      maxPoolPreparedStatementPerConnectionSize: 20
-#      ## 配置获取连接等待超时的时间
-#      maxWait: 60000
-#      # 配置一个连接在池中最小生存的时间，单位是毫秒
-#      minEvictableIdleTimeMillis: 300000
-#      poolPreparedStatements: true
-#      #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-#      testOnBorrow: false
-#      #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-#      testOnReturn: false
-#      #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
-#      testWhileIdle: true
+    druid:
+      ## 初始化大小，最小，最大
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxPoolPreparedStatementPerConnectionSize: 20
+      ## 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      poolPreparedStatements: true
+      #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnBorrow: false
+      #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnReturn: false
+      #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      testWhileIdle: true
   profiles:
     active: pord
   #配置邮箱信息

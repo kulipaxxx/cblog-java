@@ -2,15 +2,22 @@ package com.cheng.shrio;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.cheng.entity.User;
+import com.cheng.entity.role.Record;
 import com.cheng.service.UserService;
 import com.cheng.utils.JwtUtils;
+import com.cheng.utils.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.List;
+
 @Slf4j
 @Component
 public class AccountRealm extends AuthorizingRealm {
@@ -18,6 +25,7 @@ public class AccountRealm extends AuthorizingRealm {
     JwtUtils jwtUtils;
     @Autowired
     UserService userService;
+
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof JwtToken;
@@ -31,9 +39,19 @@ public class AccountRealm extends AuthorizingRealm {
      *///授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        //获取用户的用户名
+        Long id = ShiroUtil.getProfile().getId();
 
+        List<Record> rolesRecord = userService.getRoles(id);
+        HashSet<String> roles = new HashSet<>();
+        rolesRecord.forEach(sn -> {
+            roles.add(sn.getString("sn"));
+        });
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setRoles(roles);
+        //info.setStringPermissions(ps);
 
-        return null;
+        return info;
     }
 
     /**
