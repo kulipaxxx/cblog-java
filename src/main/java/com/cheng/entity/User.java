@@ -65,4 +65,6 @@ public class User implements Serializable {
     @ApiModelProperty("用户年龄")
     private int age;
 
+    @ApiModelProperty("用户权限")
+    private Long roleId;
 }

@@ -26,6 +26,12 @@ public class AccountRealm extends AuthorizingRealm {
     @Autowired
     UserService userService;
 
+    /**
+     * 支持
+     *
+     * @param token 令牌
+     * @return boolean
+     */
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof JwtToken;

@@ -72,6 +72,7 @@ public class AccountController {
 
         //获取当前用户id作为shrio主id
         String jwt = jwtUtils.generateToken(user.getId());
+        //new UsernamePasswordToken()
         log.info("jwt{}", jwt);
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
@@ -127,6 +128,8 @@ public class AccountController {
         temp.setStatus(0);
         temp.setPassword(DigestUtil.md5Hex(registerDto.getPassword()));
         temp.setUsername(registerDto.getUsername());
+        //设置普通用户权限
+        temp.setRoleId(1L);
         userService.save(temp);
         //异步发送注册成功邮件
         mailService.sendHtmlMail(registerDto.getEmail(),"注册成功", registerDto);
