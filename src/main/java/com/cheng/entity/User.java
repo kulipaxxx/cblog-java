@@ -3,6 +3,7 @@ package com.cheng.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -54,9 +55,11 @@ public class User implements Serializable {
     private Integer status;
 
     @ApiModelProperty("用户注册时间")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDateTime created;
 
     @ApiModelProperty("用户上次登录时间")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDateTime lastLogin;
 
     @ApiModelProperty("用户性别")

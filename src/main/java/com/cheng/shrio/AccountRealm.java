@@ -45,6 +45,7 @@ public class AccountRealm extends AuthorizingRealm {
      *///授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        log.info("进入授权方法");
         //获取用户的用户名
         Long id = ShiroUtil.getProfile().getId();
 
@@ -52,6 +53,7 @@ public class AccountRealm extends AuthorizingRealm {
         HashSet<String> roles = new HashSet<>();
         rolesRecord.forEach(sn -> {
             roles.add(sn.getString("sn"));
+            log.info("用户权限:{}",sn.getString("sn"));
         });
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setRoles(roles);

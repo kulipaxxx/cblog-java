@@ -1,7 +1,8 @@
 package com.cheng.controller.admin.user;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cheng.common.dto.RoleDto;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
 import com.cheng.service.UserService;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -64,20 +64,16 @@ public class UserRoleController {
      * @param user 用户
      * @return {@link Result}
      */
-    //@RequiresAuthentication
+    @RequiresRoles("admin")
     @PostMapping("/edit")
-    public Result editRoles(@Validated @RequestBody User user) {
-        User temp = null;
-        if (user.getId() != null) {//存在用户，进行编辑更新操作
-            temp = userService.getById(user.getId());
-        } else {//不存在，进行新增操作
-            temp = new User();
-            temp.setCreated(LocalDateTime.now());
-            temp.setStatus(0);
-        }
-        BeanUtil.copyProperties(user, temp, "id", "created", "status");
-        userService.saveOrUpdate(temp);
-        return Result.success(null);
+    public Result editRoles(@Validated @RequestBody RoleDto user) {
+        Assert.notNull(user, "不能传空表");
+        log.info("Role修改信息:{}", user.toString());
+        User temp = userService.getById(user.getId());
+        Assert.notNull(temp, "用户不存在");
+
+        userService.update(temp,new QueryWrapper<User>().eq("id", user.getId()));
+        return Result.success("修改成功");
     }
 
     /**
@@ -86,7 +82,7 @@ public class UserRoleController {
      * @param id id
      * @return {@link Result}
      */
-    //@RequiresAuthentication
+    @RequiresRoles("admin")
     @DeleteMapping("{id}")
     public Result deleteRoles(@PathVariable long id){
         User user = userService.getById(id);
