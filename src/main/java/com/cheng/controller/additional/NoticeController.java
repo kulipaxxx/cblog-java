@@ -10,6 +10,7 @@ import com.cheng.common.lang.Result;
 import com.cheng.entity.Notice;
 import com.cheng.service.NoticeService;
 import com.cheng.utils.ShiroUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 @RestController
 @Slf4j
 @RequestMapping("/api/notice")
+@Api("公告板块")
 public class NoticeController {
 
     @Autowired
@@ -43,20 +45,19 @@ public class NoticeController {
      * @param currentPage 当前页面
      * @return {@link Result}
      */
+    @RequiresAuthentication
     @GetMapping("/getNotice/{id}/{currentPage}")
     public Result getNotice(@PathVariable Long id,@PathVariable Integer currentPage){
         log.info("用户id{},{}",id,currentPage);
         if (currentPage == null || currentPage == 1) currentPage=1;
-        Notice notice = noticeService.getById(id);
-        if (notice == null){
-            return Result.success("没有公告");
-        }
+
         Page page = new Page(currentPage, 7);
-        IPage notices = noticeService.page(page, new QueryWrapper<Notice>().eq("userId", id).orderByDesc("created"));
+        IPage notices = noticeService.page(page, new QueryWrapper<Notice>().eq("user_id", id).orderByDesc("created"));
 
         return Result.success(notices);
     }
 
+    @RequiresAuthentication
     @GetMapping("/{id}")
     public Result getDetail(@PathVariable Long id){
         Notice notice = noticeService.getById(id);
@@ -69,6 +70,7 @@ public class NoticeController {
      * @param notice 请注意
      * @return {@link Result}
      */
+    @RequiresAuthentication
     @PostMapping("/editNotice")
     public Result editNotice(@Validated @RequestBody Notice notice){
         log.info("公告信息：{}", notice.toString());
@@ -84,7 +86,7 @@ public class NoticeController {
             temp.setStatus(0);
         }
         BeanUtil.copyProperties(notice, temp, "id", "userId", "created", "status");
-        //noticeService.saveOrUpdate(temp);
+        noticeService.saveOrUpdate(temp);
         return Result.success("编辑成功");
     }
 
