@@ -109,9 +109,9 @@ public class CommentController {
             map.put(CommentDto.getId(), CommentDto);
         }
 
-        // 子评论加入到父评论的 child 中
+        // 子评论同级加入到父评论的 child 中
         for (CommentDto CommentDto : list) {
-            Long id = CommentDto.getParentId();
+            Long id = CommentDto.getRootParentId(); //获取根评论id
             if (id != null) {   // 当前评论为子评论
                 CommentDto p = map.get(id);
                 if (p.getChild() == null)    // child 为空，则创建
