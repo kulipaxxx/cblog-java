@@ -120,7 +120,7 @@ public class NoticeController {
          * 4.如果不为则更新启用状态
          */
         Assert.notNull(notice,"公告不存在");
-        Notice lastOn = noticeService.getOne(new QueryWrapper<Notice>().eq("status", 1));
+        Notice lastOn = noticeService.getOne(new QueryWrapper<Notice>().eq("user_id",notice.getUserId()).eq("status", 1));
         if (lastOn != null){
             if (lastOn.getId().equals(id)){ //判断是禁用还是启用
                 lastOn.setStatus(0);
