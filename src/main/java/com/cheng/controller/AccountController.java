@@ -10,7 +10,9 @@ import com.cheng.common.dto.LoginDto;
 import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
 import com.cheng.common.lang.Result;
+import com.cheng.entity.Notice;
 import com.cheng.entity.User;
+import com.cheng.service.NoticeService;
 import com.cheng.service.UserService;
 import com.cheng.service.additionalService.MailService;
 import com.cheng.utils.JwtUtils;
@@ -44,6 +46,8 @@ public class AccountController {
     RedisUtil redisUtil;
     @Autowired
     MailService mailService;
+    @Autowired
+    NoticeService noticeService;
 
     /**
      * 登录
@@ -63,12 +67,14 @@ public class AccountController {
             return Result.error("密码或账号错误！");
         }
         String code = (String) redisUtil.get(loginDto.getUuid());
-        Assert.notNull(code,"验证码已失效，请刷新验证码");
-        Assert.isTrue(code.equals(loginDto.getCode()),"验证码错误");
+        Assert.notNull(code, "验证码已失效，请刷新验证码");
+        Assert.isTrue(code.equals(loginDto.getCode()), "验证码错误");
 
         //更新登录时间
         user.setLastLogin(LocalDateTime.now());
-        userService.update(user,new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+        userService.update(user, new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+        //获取有效公告
+        Notice notice = noticeService.getOne(new QueryWrapper<Notice>().eq("user_id", user.getId()).eq("status", 1));
 
         //获取当前用户id作为shrio主id
         String jwt = jwtUtils.generateToken(user.getId());
@@ -76,17 +82,32 @@ public class AccountController {
         log.info("jwt{}", jwt);
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
-        // 用户可以另一个接口
-        return Result.success(MapUtil.builder()
-                .put("id", user.getId())
-                .put("username", user.getUsername())
-                .put("avatar", user.getAvatar())
-                .put("email", user.getEmail())
-                .put("gender", user.getGender())
-                .put("age", user.getAge())
-                .put("password", user.getPassword())
-                .map()
-        );
+
+        if (notice != null)
+            // 用户可以另一个接口
+            return Result.success(MapUtil.builder()
+                    .put("id", user.getId())
+                    .put("username", user.getUsername())
+                    .put("avatar", user.getAvatar())
+                    .put("email", user.getEmail())
+                    .put("gender", user.getGender())
+                    .put("age", user.getAge())
+                    .put("password", user.getPassword())
+                    .put("title", notice.getTitle())
+                    .put("notice", notice.getContent())
+                    .map()
+            );
+        else
+            return Result.success(MapUtil.builder()
+                    .put("id", user.getId())
+                    .put("username", user.getUsername())
+                    .put("avatar", user.getAvatar())
+                    .put("email", user.getEmail())
+                    .put("gender", user.getGender())
+                    .put("age", user.getAge())
+                    .put("password", user.getPassword())
+                    .map()
+            );
     }
 
     /**
@@ -113,26 +134,28 @@ public class AccountController {
     @ApiOperation("注册api")
     @PostMapping("/register")
     public Result register(@Validated @RequestBody RegisterDto registerDto) throws Exception {
-        System.out.println(registerDto.toString());
-        System.out.println(redisUtil.get(registerDto.getUuid()));
-        System.out.println(!redisUtil.get(registerDto.getUuid()).equals(registerDto.getCode()));
+        log.info("注册模块：用户信息：{}", registerDto.toString());
+
         User temp = null;
         if (registerDto.getUsername() != null) {//判别是否重名
             temp = userService.getOne(new QueryWrapper<User>().eq("username", registerDto.getUsername()));
             Assert.isNull(temp, "用户已存在");
         }
-        Assert.isTrue(redisUtil.get(registerDto.getUuid()).equals(registerDto.getCode()),"验证码错误");
+        String code = (String) redisUtil.get(registerDto.getUuid());
+        Assert.notNull(code, "验证码已失效，请刷新验证码");
+        Assert.isTrue(redisUtil.get(registerDto.getUuid()).equals(registerDto.getCode()), "验证码错误");
 
         temp = new User();
         temp.setCreated(LocalDateTime.now());
         temp.setStatus(0);
         temp.setPassword(DigestUtil.md5Hex(registerDto.getPassword()));
         temp.setUsername(registerDto.getUsername());
+        temp.setEmail(registerDto.getEmail());
         //设置普通用户权限
         temp.setRoleId(1L);
         userService.save(temp);
         //异步发送注册成功邮件
-        mailService.sendHtmlMail(registerDto.getEmail(),"注册成功", registerDto);
+        mailService.sendHtmlMail(registerDto.getEmail(), "注册成功", registerDto);
 
         return Result.success("注册成功");
     }
@@ -144,7 +167,7 @@ public class AccountController {
      *///获取验证码的请求路径
     @ApiOperation("获取验证码api")
     @GetMapping("/code")
-    public Result captcha(){
+    public Result captcha() {
 
         //算术类型
         ArithmeticCaptcha captcha = new ArithmeticCaptcha();
@@ -166,13 +189,13 @@ public class AccountController {
         //获取运算结果
         String result = captcha.text();
 
-        log.info("===============获取运算结果为=========:{}",result);
+        log.info("===============获取运算结果为=========:{}", result);
 
         String key = UUID.randomUUID().toString();
         //存入redis缓存,过期时间两分钟
         log.info("===============获取运算结果为=========:{}", key);
-        redisUtil.set(key,result,2);
-        Map<String,Object> map = new HashMap<>();
+        redisUtil.set(key, result, 2);
+        Map<String, Object> map = new HashMap<>();
         map.put("key", key);
         map.put("img", captcha.toBase64());
 
@@ -188,9 +211,9 @@ public class AccountController {
      */
     @PostMapping("/getPassword")
     public Result getPassword(@Validated @RequestBody pwdDto pwdDto) throws Exception {
-        Assert.isTrue(redisUtil.get(pwdDto.getUuid()).equals(pwdDto.getCode()),"验证码错误");
+        Assert.isTrue(redisUtil.get(pwdDto.getUuid()).equals(pwdDto.getCode()), "验证码错误");
         User email = userService.getOne(new QueryWrapper<User>().eq("username", pwdDto.getUsername()));
-        Assert.notNull(email,"用户不存在");
+        Assert.notNull(email, "用户不存在");
         mailService.getPassword(pwdDto);
         return Result.success("邮件已发送");
     }

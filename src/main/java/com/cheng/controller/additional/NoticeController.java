@@ -64,6 +64,7 @@ public class NoticeController {
         Assert.notNull(notice,"公告不存在");
         return Result.success(notice);
     }
+
     /**
      * 编辑或新建公告
      *
@@ -78,6 +79,7 @@ public class NoticeController {
         if (notice.getId() != null){
             temp = noticeService.getById(notice.getId());
             temp.setUpdate_time(LocalDateTime.now());
+            noticeService.update();
             Assert.isTrue(temp.getUserId().equals(ShiroUtil.getProfile().getId()), "没有权限编辑");
         }else {
             temp = new Notice();
@@ -99,5 +101,36 @@ public class NoticeController {
 
         noticeService.removeById(id);
         return Result.success("删除成功");
+    }
+
+    /**
+     * 启用notice
+     *
+     * @param id id
+     * @return {@link Result}
+     */
+    @RequiresAuthentication
+    @PostMapping("/{id}")
+    public Result onNotice(@PathVariable Long id){
+        Notice notice = noticeService.getById(id);
+        /**
+         * 1.获取上一次启用的公告
+         * 2.判断是否为同一个
+         * 3.如果为同一个则禁用
+         * 4.如果不为则更新启用状态
+         */
+        Assert.notNull(notice,"公告不存在");
+        Notice lastOn = noticeService.getOne(new QueryWrapper<Notice>().eq("status", 1));
+        if (lastOn != null){
+            if (lastOn.getId().equals(id)){ //判断是禁用还是启用
+                lastOn.setStatus(0);
+                noticeService.update(lastOn, new QueryWrapper<Notice>().eq("id", id));
+            }
+        } else { // 启用
+            notice.setStatus(1);
+            noticeService.update(notice,new QueryWrapper<Notice>().eq("id", id));
+        }
+
+        return Result.success("启用成功");
     }
 }

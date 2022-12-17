@@ -28,7 +28,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 1845472368@qq.com
-    password: lzxtmadkfdbubcfj
+    password: bhdacpvlytoibfjf
     default-encoding: utf-8
     protocol: smtp
 
