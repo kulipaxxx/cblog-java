@@ -1,6 +1,8 @@
 package com.cheng.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.UserDto;
 import com.cheng.common.lang.Result;
 import com.cheng.entity.User;
@@ -45,15 +47,18 @@ public class UserController {
     /**
      * 保存
      *
-     * @param user 用户
+     * @param userDto 用户dto
      * @return {@link Result}
-     *///编辑用户信息
+     */ //编辑用户信息
     @ApiOperation("保存用户信息api")
     @RequiresAuthentication //要求权限
     @PostMapping("/save")
-    public Result save(@Validated @RequestBody UserDto user) {
-        log.info("用户修改之后的信息:{}", user.toString());
-        //userService.saveOrUpdate();
+    public Result save(@Validated @RequestBody UserDto userDto) {
+        log.info("用户修改之后的信息:{}", userDto.toString());
+        User user = userService.getById(userDto.getId());
+        BeanUtil.copyProperties(userDto,user);
+        //log.info(user.toString());
+        userService.update(user,new QueryWrapper<User>().eq("id",user.getId()));
         return Result.success(user);
     }
 }
