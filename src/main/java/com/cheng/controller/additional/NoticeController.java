@@ -79,7 +79,7 @@ public class NoticeController {
         if (notice.getId() != null){
             temp = noticeService.getById(notice.getId());
             temp.setUpdate_time(LocalDateTime.now());
-            noticeService.update();
+            //noticeService.update();
             Assert.isTrue(temp.getUserId().equals(ShiroUtil.getProfile().getId()), "没有权限编辑");
         }else {
             temp = new Notice();
