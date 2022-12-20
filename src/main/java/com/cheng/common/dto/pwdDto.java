@@ -22,6 +22,9 @@ public class pwdDto implements Serializable {
     @NotBlank(message = "昵称不能为空")
     private String username;
 
+    @ApiModelProperty("新密码")
+    private String password;
+
     @ApiModelProperty("邮箱")
     private String email;
 

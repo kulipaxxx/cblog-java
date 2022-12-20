@@ -1,5 +1,6 @@
 package com.cheng.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.map.MapUtil;
@@ -140,6 +141,8 @@ public class AccountController {
         if (registerDto.getUsername() != null) {//判别是否重名
             temp = userService.getOne(new QueryWrapper<User>().eq("username", registerDto.getUsername()));
             Assert.isNull(temp, "用户已存在");
+            //User email = userService.getOne(new QueryWrapper<User>().eq("email", registerDto.getEmail()));
+            //Assert.isNull(email,"该邮箱已被注册");
         }
         String code = (String) redisUtil.get(registerDto.getUuid());
         Assert.notNull(code, "验证码已失效，请刷新验证码");
@@ -211,9 +214,18 @@ public class AccountController {
      */
     @PostMapping("/getPassword")
     public Result getPassword(@Validated @RequestBody pwdDto pwdDto) throws Exception {
+        String code = (String) redisUtil.get(pwdDto.getUuid());
+        Assert.notNull(code, "验证码已失效，请刷新验证码");
         Assert.isTrue(redisUtil.get(pwdDto.getUuid()).equals(pwdDto.getCode()), "验证码错误");
         User email = userService.getOne(new QueryWrapper<User>().eq("username", pwdDto.getUsername()));
         Assert.notNull(email, "用户不存在");
+        Assert.isTrue(pwdDto.getEmail().equals(email.getEmail()),"邮箱地址与该用户不匹配");
+        BeanUtil.copyProperties(pwdDto,email,"id","avatar","status","created"
+                ,"lastLogin","gender","age","roleId");
+        //密码加密
+        email.setPassword(SecureUtil.md5(pwdDto.getPassword()));
+        userService.update(email,new QueryWrapper<User>().eq("username", pwdDto.getUsername()));
+        System.out.println("user: " +  email.toString());
         mailService.getPassword(pwdDto);
         return Result.success("邮件已发送");
     }

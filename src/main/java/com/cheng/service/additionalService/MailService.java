@@ -1,12 +1,8 @@
 package com.cheng.service.additionalService;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cheng.common.dto.RegisterDto;
 import com.cheng.common.dto.pwdDto;
-import com.cheng.entity.User;
 import com.cheng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,7 +109,7 @@ public class MailService {
      * @param pwd     松材线虫病
      * @throws Exception 异常
      */
-    public void sendHtmlMail(String to, String subject, pwdDto pwdDto, String pwd) throws Exception {
+    public void sendHtmlMail(String to, String subject, pwdDto pwdDto) throws Exception {
         System.out.println(DateUtil.now());
         String content = "<div style=\"background-color:#ECECEC; padding: 35px;\">\n" +
                 "    <table cellpadding=\"0\" align=\"center\"\n" +
@@ -136,7 +132,7 @@ public class MailService {
                 "                    </h2>\n" +
                 "                    <p>首先感谢您加入CHUB！下面是您的账号信息<br>\n" +
                 "                        您的账号：<b>"+ pwdDto.getUsername() +"</b><br>\n" +
-                "                        您的密码：<b>"+ pwd +"</b><br>\n" +
+                "                        您的密码：<b>"+ pwdDto.getPassword() +"</b><br>\n" +
                 "                        您的邮箱：<b>" + to + "</b><br>\n" +
                 "                        您注册时的日期：<b>"+ DateUtil.now() + "</b><br>\n" +
                 "                        当您在使用本网站时，遵守当地法律法规。<br>\n" +
@@ -172,9 +168,6 @@ public class MailService {
     }
 
     public void getPassword(pwdDto pwdDto) throws Exception {
-        User email = userService.getOne(new QueryWrapper<User>().eq("email", pwdDto.getEmail()));
-        Assert.notNull(email,"邮箱不匹配");
-        String pwd = SecureUtil.md5(email.getPassword());
-        sendHtmlMail(pwdDto.getEmail(),"找回密码",pwdDto, pwd);
+        sendHtmlMail(pwdDto.getEmail(),"找回密码",pwdDto);
     }
 }
