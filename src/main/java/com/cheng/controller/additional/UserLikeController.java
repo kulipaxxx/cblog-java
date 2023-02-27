@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
@@ -35,7 +36,7 @@ import java.time.LocalDateTime;
 @Api(description = "点赞模块")
 public class UserLikeController {
 
-    @Autowired
+    @Resource
     RedisService redisService;
 
     @Autowired
