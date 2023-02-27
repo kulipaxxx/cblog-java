@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
  * @Version 1.0
  */
 @Service
-@Async
+@Async("Redis_task")
 public class MailService {
     //定义邮件发送器
     @Autowired

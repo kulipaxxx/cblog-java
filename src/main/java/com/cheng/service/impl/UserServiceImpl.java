@@ -1,13 +1,13 @@
 package com.cheng.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cheng.entity.User;
 import com.cheng.entity.role.Record;
 import com.cheng.mapper.UserMapper;
 import com.cheng.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    @Autowired
+    @Resource
     UserMapper userMapper;
 
     @Override
